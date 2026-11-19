@@ -41,7 +41,8 @@ var DEFAULT_CATEGORIES = [
 
 var DEFAULT_FOOTER = {
   text_main: 'Smart School Web App Hub • High-Performance GAS Architecture',
-  text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ'
+  text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ',
+  text_dev: 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง'
 };
 
 var DEFAULT_SETTINGS = {
@@ -53,7 +54,8 @@ var DEFAULT_SETTINGS = {
   maintenance_mode: false,
   maintenance_message: 'ระบบกำลังปิดปรับปรุงชั่วคราวเพื่อพัฒนาระบบ กรุณาเข้าใช้งานใหม่อีกครั้งในภายหลัง',
   footer_text_main: 'Smart School Web App Hub • High-Performance GAS Architecture',
-  footer_text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ'
+  footer_text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ',
+  footer_text_dev: 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง'
 };
 
 /**
@@ -343,7 +345,8 @@ function getPublicData(forceRefresh) {
       settings: DEFAULT_SETTINGS,
       footer: {
         text_main: DEFAULT_FOOTER.text_main,
-        text_sub: DEFAULT_FOOTER.text_sub
+        text_sub: DEFAULT_FOOTER.text_sub,
+        text_dev: DEFAULT_FOOTER.text_dev
       },
       timestamp: new Date().getTime()
     };
@@ -531,7 +534,8 @@ function getOrCreateSettingsSheet(ss) {
       ['maintenance_mode', 'false', 'โจัดปรับปรุงระบบ (true/false)', Utilities.formatDate(new Date(), CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss')],
       ['maintenance_message', DEFAULT_SETTINGS.maintenance_message, 'ข้อความแจ้งเตือนเมื่อปิดปรับปรุง', Utilities.formatDate(new Date(), CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss')],
       ['footer_text_main', DEFAULT_SETTINGS.footer_text_main, 'ข้อความแถวบนท้ายเว็บ (Footer Main)', Utilities.formatDate(new Date(), CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss')],
-      ['footer_text_sub', DEFAULT_SETTINGS.footer_text_sub, 'ข้อความแถวล่างท้ายเว็บ (Footer Sub)', Utilities.formatDate(new Date(), CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss')]
+      ['footer_text_sub', DEFAULT_SETTINGS.footer_text_sub, 'ข้อความแถวกลางท้ายเว็บ (Footer Sub)', Utilities.formatDate(new Date(), CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss')],
+      ['footer_text_dev', DEFAULT_SETTINGS.footer_text_dev, 'ข้อความผู้พัฒนาระบบท้ายเว็บ (Footer Developer)', Utilities.formatDate(new Date(), CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm:ss')]
     ];
 
     initialSettings.forEach(function(row) {
@@ -1229,8 +1233,8 @@ function saveAnnouncement(annData) {
 }
 
 /**
- * Retrieve Footer Settings from ScriptProperties
- * @returns {Object} { text_main, text_sub }
+ * Retrieve Footer Settings from ScriptProperties (with Settings sheet fallback and legacy 2-field migration)
+ * @returns {Object} { text_main, text_sub, text_dev }
  */
 function getFooterSettings() {
   try {
@@ -1238,10 +1242,22 @@ function getFooterSettings() {
     var val = props.getProperty('FOOTER_SETTINGS');
     if (val) {
       var parsed = JSON.parse(val);
-      if (parsed && (parsed.text_main || parsed.text_sub)) {
+      if (parsed && (parsed.text_main !== undefined || parsed.text_sub !== undefined || parsed.text_dev !== undefined)) {
+        // One-time auto-migration from old 2-line setup where text_sub held "พัฒนาโดย ..."
+        if (parsed.text_dev === undefined) {
+          var sheetSub = getSettingValue('footer_text_sub', DEFAULT_FOOTER.text_sub);
+          var legacySub = String(parsed.text_sub || '');
+          var isDevInLegacySub = legacySub.indexOf('พัฒนาโดย') !== -1;
+          return {
+            text_main: parsed.text_main || DEFAULT_FOOTER.text_main,
+            text_sub: isDevInLegacySub ? sheetSub : (legacySub || DEFAULT_FOOTER.text_sub),
+            text_dev: isDevInLegacySub ? legacySub : DEFAULT_FOOTER.text_dev
+          };
+        }
         return {
-          text_main: parsed.text_main || DEFAULT_FOOTER.text_main,
-          text_sub: parsed.text_sub || DEFAULT_FOOTER.text_sub
+          text_main: parsed.text_main !== undefined ? String(parsed.text_main) : DEFAULT_FOOTER.text_main,
+          text_sub: parsed.text_sub !== undefined ? String(parsed.text_sub) : DEFAULT_FOOTER.text_sub,
+          text_dev: parsed.text_dev !== undefined ? String(parsed.text_dev) : DEFAULT_FOOTER.text_dev
         };
       }
     }
@@ -1250,13 +1266,14 @@ function getFooterSettings() {
   }
   return {
     text_main: DEFAULT_FOOTER.text_main,
-    text_sub: DEFAULT_FOOTER.text_sub
+    text_sub: DEFAULT_FOOTER.text_sub,
+    text_dev: DEFAULT_FOOTER.text_dev
   };
 }
 
 /**
- * Save Footer Settings to ScriptProperties
- * @param {Object} footerData - { text_main, text_sub }
+ * Save Footer Settings to ScriptProperties and Settings sheet
+ * @param {Object} footerData - { text_main, text_sub, text_dev }
  */
 function saveFooterSettings(footerData) {
   if (!footerData) {
@@ -1268,11 +1285,26 @@ function saveFooterSettings(footerData) {
     var props = PropertiesService.getScriptProperties();
     var settings = {
       text_main: String(footerData.text_main || DEFAULT_FOOTER.text_main).trim(),
-      text_sub: String(footerData.text_sub || DEFAULT_FOOTER.text_sub).trim()
+      text_sub: footerData.text_sub !== undefined ? String(footerData.text_sub).trim() : DEFAULT_FOOTER.text_sub,
+      text_dev: footerData.text_dev !== undefined ? String(footerData.text_dev).trim() : DEFAULT_FOOTER.text_dev
     };
     props.setProperty('FOOTER_SETTINGS', JSON.stringify(settings));
     setSettingValue('footer_text_main', settings.text_main, 'ข้อความแถวบนท้ายเว็บ (Footer Main)');
-    setSettingValue('footer_text_sub', settings.text_sub, 'ข้อความแถวล่างท้ายเว็บ (Footer Sub)');
+    setSettingValue('footer_text_sub', settings.text_sub, 'ข้อความแถวกลางท้ายเว็บ (Footer Sub)');
+    setSettingValue('footer_text_dev', settings.text_dev, 'ข้อความผู้พัฒนาระบบท้ายเว็บ (Footer Developer)');
+
+    // Keep SITE_SETTINGS property synced if present
+    try {
+      var siteVal = props.getProperty('SITE_SETTINGS');
+      if (siteVal) {
+        var siteParsed = JSON.parse(siteVal);
+        siteParsed.footer_text_main = settings.text_main;
+        siteParsed.footer_text_sub = settings.text_sub;
+        siteParsed.footer_text_dev = settings.text_dev;
+        props.setProperty('SITE_SETTINGS', JSON.stringify(siteParsed));
+      }
+    } catch (syncErr) {}
+
     invalidateCache();
     return {
       success: true,
@@ -1297,14 +1329,21 @@ function getSiteSettings() {
     var sheet = getOrCreateSettingsSheet(ss);
     var data = sheet.getDataRange().getValues();
     var map = {};
+    var hasKey = {};
     for (var i = 1; i < data.length; i++) {
       var k = String(data[i][0]).trim();
       var v = data[i][1];
-      if (k && v !== undefined && v !== null && String(v).trim() !== '') {
-        map[k] = v;
+      if (k) {
+        hasKey[k] = true;
+        if (v !== undefined && v !== null && String(v).trim() !== '') {
+          map[k] = v;
+        } else if (k === 'footer_text_sub' || k === 'footer_text_dev') {
+          map[k] = '';
+        }
       }
     }
-    if (Object.keys(map).length > 0) {
+    if (Object.keys(hasKey).length > 0) {
+      var footerFallback = getFooterSettings();
       return {
         theme: map['theme'] || DEFAULT_SETTINGS.theme,
         font: map['font'] || DEFAULT_SETTINGS.font,
@@ -1313,8 +1352,9 @@ function getSiteSettings() {
         school_logo_url: map['school_logo_url'] || DEFAULT_SETTINGS.school_logo_url,
         maintenance_mode: map['maintenance_mode'] === true || String(map['maintenance_mode']).toLowerCase() === 'true',
         maintenance_message: map['maintenance_message'] || DEFAULT_SETTINGS.maintenance_message,
-        footer_text_main: map['footer_text_main'] || DEFAULT_SETTINGS.footer_text_main,
-        footer_text_sub: map['footer_text_sub'] || DEFAULT_SETTINGS.footer_text_sub
+        footer_text_main: map['footer_text_main'] || footerFallback.text_main || DEFAULT_SETTINGS.footer_text_main,
+        footer_text_sub: hasKey['footer_text_sub'] ? map['footer_text_sub'] : footerFallback.text_sub,
+        footer_text_dev: hasKey['footer_text_dev'] ? map['footer_text_dev'] : footerFallback.text_dev
       };
     }
   } catch (e) {
@@ -1336,7 +1376,8 @@ function getSiteSettings() {
         maintenance_mode: Boolean(parsed.maintenance_mode),
         maintenance_message: parsed.maintenance_message || DEFAULT_SETTINGS.maintenance_message,
         footer_text_main: parsed.footer_text_main || DEFAULT_SETTINGS.footer_text_main,
-        footer_text_sub: parsed.footer_text_sub || DEFAULT_SETTINGS.footer_text_sub
+        footer_text_sub: parsed.footer_text_sub !== undefined ? parsed.footer_text_sub : DEFAULT_SETTINGS.footer_text_sub,
+        footer_text_dev: parsed.footer_text_dev !== undefined ? parsed.footer_text_dev : DEFAULT_SETTINGS.footer_text_dev
       };
     }
   } catch (propsErr) {
@@ -1351,7 +1392,8 @@ function getSiteSettings() {
     maintenance_mode: DEFAULT_SETTINGS.maintenance_mode,
     maintenance_message: DEFAULT_SETTINGS.maintenance_message,
     footer_text_main: DEFAULT_SETTINGS.footer_text_main,
-    footer_text_sub: DEFAULT_SETTINGS.footer_text_sub
+    footer_text_sub: DEFAULT_SETTINGS.footer_text_sub,
+    footer_text_dev: DEFAULT_SETTINGS.footer_text_dev
   };
 }
 
@@ -1376,7 +1418,8 @@ function saveSiteSettings(payload) {
       maintenance_mode: payload.maintenance_mode !== undefined ? Boolean(payload.maintenance_mode) : current.maintenance_mode,
       maintenance_message: payload.maintenance_message !== undefined ? String(payload.maintenance_message).trim() : current.maintenance_message,
       footer_text_main: payload.footer_text_main !== undefined ? String(payload.footer_text_main).trim() : current.footer_text_main,
-      footer_text_sub: payload.footer_text_sub !== undefined ? String(payload.footer_text_sub).trim() : current.footer_text_sub
+      footer_text_sub: payload.footer_text_sub !== undefined ? String(payload.footer_text_sub).trim() : current.footer_text_sub,
+      footer_text_dev: payload.footer_text_dev !== undefined ? String(payload.footer_text_dev).trim() : current.footer_text_dev
     };
 
     // Save each key to Settings sheet
@@ -1388,14 +1431,16 @@ function saveSiteSettings(payload) {
     setSettingValue('maintenance_mode', String(updated.maintenance_mode), 'โหมดปิดปรับปรุงระบบ (true/false)');
     setSettingValue('maintenance_message', updated.maintenance_message, 'ข้อความแจ้งเตือนเมื่อปิดปรับปรุง');
     setSettingValue('footer_text_main', updated.footer_text_main, 'ข้อความแถวบนท้ายเว็บ (Footer Main)');
-    setSettingValue('footer_text_sub', updated.footer_text_sub, 'ข้อความแถวล่างท้ายเว็บ (Footer Sub)');
+    setSettingValue('footer_text_sub', updated.footer_text_sub, 'ข้อความแถวกลางท้ายเว็บ (Footer Sub)');
+    setSettingValue('footer_text_dev', updated.footer_text_dev, 'ข้อความผู้พัฒนาระบบท้ายเว็บ (Footer Developer)');
 
     // Also persist in PropertiesService for backwards compatibility
     var props = PropertiesService.getScriptProperties();
     props.setProperty('SITE_SETTINGS', JSON.stringify(updated));
     props.setProperty('FOOTER_SETTINGS', JSON.stringify({
       text_main: updated.footer_text_main,
-      text_sub: updated.footer_text_sub
+      text_sub: updated.footer_text_sub,
+      text_dev: updated.footer_text_dev
     }));
 
     invalidateCache();

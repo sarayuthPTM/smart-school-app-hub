@@ -1238,12 +1238,23 @@
               </div>
 
               <div>
-                <label class="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">ข้อความแถวล่าง (ลิขสิทธิ์ / สถานศึกษา)</label>
+                <label class="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">ข้อความแถวกลาง (ลิขสิทธิ์ / สถานศึกษา)</label>
                 <input 
                   type="text" 
                   id="input-footer-sub" 
                   oninput="updateFooterLivePreview()"
                   placeholder="เช่น พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ" 
+                  class="w-full p-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-400 focus:outline-none"
+                >
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">ข้อความแถวล่าง (พัฒนาโดย / ผู้พัฒนาระบบ)</label>
+                <input 
+                  type="text" 
+                  id="input-footer-dev" 
+                  oninput="updateFooterLivePreview()"
+                  placeholder="เช่น พัฒนาโดย ศรายุทธ พงค์ทองเมือง (เว้นว่างได้หากไม่แสดง)" 
                   class="w-full p-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-400 focus:outline-none"
                 >
               </div>
@@ -1259,6 +1270,7 @@
                   <span id="preview-footer-main">Smart School Web App Hub • High-Performance GAS Architecture</span>
                 </div>
                 <p id="preview-footer-sub" class="text-[11px] text-slate-400 pt-0.5">พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ</p>
+                <p id="preview-footer-dev" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">พัฒนาโดย ศรายุทธ พงค์ทองเมือง</p>
               </div>
             </div>
           </div>
@@ -1524,12 +1536,23 @@
         </div>
 
         <div class="space-y-1.5">
-          <label class="font-semibold text-slate-700 dark:text-slate-300">ข้อความแถวล่าง (ชื่อโรงเรียน / ข้อมูลลิขสิทธิ์)</label>
+          <label class="font-semibold text-slate-700 dark:text-slate-300">ข้อความแถวกลาง (ชื่อโรงเรียน / ข้อมูลลิขสิทธิ์)</label>
           <input 
             type="text" 
             id="modal-input-footer-sub" 
             oninput="updateModalFooterLivePreview()" 
             placeholder="เช่น พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ" 
+            class="w-full p-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
+          >
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="font-semibold text-slate-700 dark:text-slate-300">ข้อความแถวล่าง (พัฒนาโดย / ผู้พัฒนาระบบ)</label>
+          <input 
+            type="text" 
+            id="modal-input-footer-dev" 
+            oninput="updateModalFooterLivePreview()" 
+            placeholder="เช่น พัฒนาโดย ศรายุทธ พงค์ทองเมือง (เว้นว่างได้หากไม่แสดง)" 
             class="w-full p-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
           >
         </div>
@@ -1545,6 +1568,7 @@
             <span id="modal-preview-footer-main">Smart School Web App Hub • High-Performance GAS Architecture</span>
           </div>
           <p id="modal-preview-footer-sub" class="text-[11px] text-slate-400 pt-0.5">พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ</p>
+          <p id="modal-preview-footer-dev" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">พัฒนาโดย ศรายุทธ พงค์ทองเมือง</p>
         </div>
       </div>
 
@@ -1766,10 +1790,14 @@
         <span id="footer-text-main">Smart School Web App Hub • High-Performance GAS Architecture</span>
       </div>
 
-      <!-- Secondary Subtext / School / Copyright (Centered) -->
-      <div class="flex flex-wrap items-center justify-center gap-x-2 text-[11px] text-slate-400 dark:text-slate-500 font-normal">
-        <span id="footer-text-sub">พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ</span>
-        
+      <!-- Secondary Subtext & Developer Credit (Centered) -->
+      <div class="flex flex-col items-center justify-center space-y-1">
+        <div id="footer-sub-wrap" class="flex flex-wrap items-center justify-center gap-x-2 text-[11px] text-slate-400 dark:text-slate-500 font-normal">
+          <span id="footer-text-sub">พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ</span>
+        </div>
+        <div id="footer-dev-wrap" class="flex flex-wrap items-center justify-center gap-x-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+          <span id="footer-text-dev">พัฒนาโดย ศรายุทธ พงค์ทองเมือง</span>
+        </div>
       </div>
     </div>
   </footer>
@@ -1945,7 +1973,8 @@
       categories: ['กลุ่มบริหารทั่วไป', 'กลุ่มบริหารงานงบประมาณ', 'กลุ่มบริหารงานวิชาการ', 'กลุ่มบริหารงานบุคคล', 'สำหรับผู้บริหาร'],
       footer: {
         text_main: 'Smart School Web App Hub • High-Performance GAS Architecture',
-        text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ'
+        text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ',
+        text_dev: 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง'
       },
       settings: {
         theme: 'navy-gold',
@@ -2145,7 +2174,8 @@
       if (!mockFooter) {
         mockFooter = {
           text_main: 'Smart School Web App Hub • High-Performance GAS Architecture',
-          text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ'
+          text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ',
+          text_dev: 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง'
         };
         SafeStorage.setItem('mock_db_footer', JSON.stringify(mockFooter));
       }
@@ -4324,6 +4354,7 @@
       const inpMaintMsg = document.getElementById('input-settings-maintenance-msg');
       const inpFooterMain = document.getElementById('input-footer-main');
       const inpFooterSub = document.getElementById('input-footer-sub');
+      const inpFooterDev = document.getElementById('input-footer-dev');
 
       if (inpName) inpName.value = settings.school_name || '';
       if (inpTag) inpTag.value = settings.school_tagline || '';
@@ -4333,8 +4364,12 @@
       }
       if (inpMaint) inpMaint.checked = Boolean(settings.maintenance_mode);
       if (inpMaintMsg) inpMaintMsg.value = settings.maintenance_message || '';
-      if (inpFooterMain) inpFooterMain.value = settings.footer_text_main || (APP_STATE.footer && APP_STATE.footer.text_main) || '';
-      if (inpFooterSub) inpFooterSub.value = settings.footer_text_sub || (APP_STATE.footer && APP_STATE.footer.text_sub) || '';
+      const activeFooterMain = (APP_STATE.footer && APP_STATE.footer.text_main !== undefined) ? APP_STATE.footer.text_main : (settings.footer_text_main || '');
+      const activeFooterSub = (APP_STATE.footer && APP_STATE.footer.text_sub !== undefined) ? APP_STATE.footer.text_sub : (settings.footer_text_sub || '');
+      const activeFooterDev = (APP_STATE.footer && APP_STATE.footer.text_dev !== undefined) ? APP_STATE.footer.text_dev : (settings.footer_text_dev || '');
+      if (inpFooterMain) inpFooterMain.value = activeFooterMain;
+      if (inpFooterSub) inpFooterSub.value = activeFooterSub;
+      if (inpFooterDev) inpFooterDev.value = activeFooterDev;
       updateFooterLivePreview();
 
       renderThemeGrid(settings.theme || 'navy-gold');
@@ -4612,7 +4647,10 @@
       const maintMode = Boolean(document.getElementById('input-settings-maintenance-mode')?.checked);
       const maintMsg = document.getElementById('input-settings-maintenance-msg')?.value.trim() || 'ขณะนี้ระบบกำลังปิดปรับปรุงระบบชั่วคราว เพื่อพัฒนาประสิทธิภาพการทำงาน ขออภัยในความไม่สะดวก';
       const footerMain = document.getElementById('input-footer-main')?.value.trim() || 'Smart School Web App Hub • High-Performance GAS Architecture';
-      const footerSub = document.getElementById('input-footer-sub')?.value.trim() || 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ';
+      const footerSubEl = document.getElementById('input-footer-sub');
+      const footerSub = footerSubEl ? footerSubEl.value.trim() : 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ';
+      const footerDevEl = document.getElementById('input-footer-dev');
+      const footerDev = footerDevEl ? footerDevEl.value.trim() : 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง';
 
       const payload = {
         theme: APP_STATE.settings.theme || 'navy-gold',
@@ -4623,11 +4661,12 @@
         maintenance_mode: maintMode,
         maintenance_message: maintMsg,
         footer_text_main: footerMain,
-        footer_text_sub: footerSub
+        footer_text_sub: footerSub,
+        footer_text_dev: footerDev
       };
 
       APP_STATE.settings = { ...APP_STATE.settings, ...payload };
-      APP_STATE.footer = { text_main: footerMain, text_sub: footerSub };
+      APP_STATE.footer = { text_main: footerMain, text_sub: footerSub, text_dev: footerDev };
 
       // Immediate UI update
       applySettingsToUI(APP_STATE.settings);
@@ -4799,48 +4838,79 @@
     // ============================================================
     // FOOTER MANAGEMENT LOGIC (CRUD & LIVE PREVIEW)
     // ============================================================
+    function setFooterLineText(textEl, wrapEl, value) {
+      const text = value ? String(value).trim() : '';
+      if (textEl) textEl.textContent = text;
+      const target = wrapEl || textEl;
+      if (target) {
+        target.classList.toggle('hidden', !text);
+      }
+    }
+
     function renderFooter() {
       const footer = APP_STATE.footer || {
         text_main: 'Smart School Web App Hub • High-Performance GAS Architecture',
-        text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ'
+        text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ',
+        text_dev: 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง'
       };
 
       const mainEl = document.getElementById('footer-text-main');
       const subEl = document.getElementById('footer-text-sub');
+      const subWrap = document.getElementById('footer-sub-wrap');
+      const devEl = document.getElementById('footer-text-dev');
+      const devWrap = document.getElementById('footer-dev-wrap');
+
       if (mainEl) mainEl.textContent = footer.text_main || '';
-      if (subEl) subEl.textContent = footer.text_sub || '';
+      setFooterLineText(subEl, subWrap, footer.text_sub);
+      setFooterLineText(devEl, devWrap, footer.text_dev);
 
       // Sync preview in Tab 4 if elements exist
       const pMain = document.getElementById('preview-footer-main');
       const pSub = document.getElementById('preview-footer-sub');
+      const pDev = document.getElementById('preview-footer-dev');
       if (pMain) pMain.textContent = footer.text_main || '';
-      if (pSub) pSub.textContent = footer.text_sub || '';
+      setFooterLineText(pSub, null, footer.text_sub);
+      setFooterLineText(pDev, null, footer.text_dev);
     }
 
     function updateFooterLivePreview() {
       const mainInput = document.getElementById('input-footer-main');
       const subInput = document.getElementById('input-footer-sub');
+      const devInput = document.getElementById('input-footer-dev');
       const mainVal = (mainInput && mainInput.value) ? mainInput.value : 'Smart School Web App Hub • High-Performance GAS Architecture';
-      const subVal = (subInput && subInput.value) ? subInput.value : 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ';
+      const subVal = subInput ? subInput.value.trim() : 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ';
+      const devVal = devInput ? devInput.value.trim() : 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง';
 
       const pMain = document.getElementById('preview-footer-main');
       const pSub = document.getElementById('preview-footer-sub');
+      const pDev = document.getElementById('preview-footer-dev');
       if (pMain) pMain.textContent = mainVal;
-      if (pSub) pSub.textContent = subVal;
+      setFooterLineText(pSub, null, subVal);
+      setFooterLineText(pDev, null, devVal);
     }
 
     async function saveFooterSettingsData() {
       const mainInput = document.getElementById('input-footer-main');
       const subInput = document.getElementById('input-footer-sub');
+      const devInput = document.getElementById('input-footer-dev');
       const mainVal = (mainInput ? mainInput.value : '').trim() || 'Smart School Web App Hub • High-Performance GAS Architecture';
-      const subVal = (subInput ? subInput.value : '').trim() || 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ';
+      const subVal = subInput ? subInput.value.trim() : 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ';
+      const devVal = devInput ? devInput.value.trim() : 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง';
 
-      APP_STATE.footer = { text_main: mainVal, text_sub: subVal };
+      APP_STATE.footer = { text_main: mainVal, text_sub: subVal, text_dev: devVal };
+      APP_STATE.settings = {
+        ...APP_STATE.settings,
+        footer_text_main: mainVal,
+        footer_text_sub: subVal,
+        footer_text_dev: devVal
+      };
       renderFooter();
 
       Swal.fire({ title: 'กำลังบันทึกข้อมูลท้ายเว็บ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
       try {
         const res = await callBackend('saveFooterSettings', APP_STATE.footer);
+        SafeStorage.removeItem(APP_RUNTIME_CONFIG.PUBLIC_CACHE_KEY);
+        SafeStorage.removeItem(APP_RUNTIME_CONFIG.ADMIN_DATA_CACHE_KEY);
         Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ', text: (res && res.message) ? res.message : 'บันทึกข้อมูลท้ายเว็บเรียบร้อยแล้ว', timer: 1500, showConfirmButton: false });
       } catch (err) {
         Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: err.toString() });
@@ -4850,13 +4920,16 @@
     function openFooterEditorModal() {
       const footer = APP_STATE.footer || {
         text_main: 'Smart School Web App Hub • High-Performance GAS Architecture',
-        text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ'
+        text_sub: 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ',
+        text_dev: 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง'
       };
 
       const mMain = document.getElementById('modal-input-footer-main');
       const mSub = document.getElementById('modal-input-footer-sub');
+      const mDev = document.getElementById('modal-input-footer-dev');
       if (mMain) mMain.value = footer.text_main || '';
-      if (mSub) mSub.value = footer.text_sub || '';
+      if (mSub) mSub.value = footer.text_sub !== undefined ? footer.text_sub : '';
+      if (mDev) mDev.value = footer.text_dev !== undefined ? footer.text_dev : '';
 
       updateModalFooterLivePreview();
       document.getElementById('modal-footer-editor').classList.remove('hidden');
@@ -4870,34 +4943,51 @@
     function updateModalFooterLivePreview() {
       const mainInput = document.getElementById('modal-input-footer-main');
       const subInput = document.getElementById('modal-input-footer-sub');
+      const devInput = document.getElementById('modal-input-footer-dev');
       const mainVal = (mainInput && mainInput.value) ? mainInput.value : 'Smart School Web App Hub • High-Performance GAS Architecture';
-      const subVal = (subInput && subInput.value) ? subInput.value : 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ';
+      const subVal = subInput ? subInput.value.trim() : 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ';
+      const devVal = devInput ? devInput.value.trim() : 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง';
 
       const pMain = document.getElementById('modal-preview-footer-main');
       const pSub = document.getElementById('modal-preview-footer-sub');
+      const pDev = document.getElementById('modal-preview-footer-dev');
       if (pMain) pMain.textContent = mainVal;
-      if (pSub) pSub.textContent = subVal;
+      setFooterLineText(pSub, null, subVal);
+      setFooterLineText(pDev, null, devVal);
     }
 
     async function saveModalFooterSettings() {
       const mMain = document.getElementById('modal-input-footer-main');
       const mSub = document.getElementById('modal-input-footer-sub');
+      const mDev = document.getElementById('modal-input-footer-dev');
       const mainVal = (mMain ? mMain.value : '').trim() || 'Smart School Web App Hub • High-Performance GAS Architecture';
-      const subVal = (mSub ? mSub.value : '').trim() || 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ';
+      const subVal = mSub ? mSub.value.trim() : 'พัฒนาเพื่อสถานศึกษา • ลิขสิทธิ์ระบบสารสนเทศ';
+      const devVal = mDev ? mDev.value.trim() : 'พัฒนาโดย ศรายุทธ พงค์ทองเมือง';
 
-      APP_STATE.footer = { text_main: mainVal, text_sub: subVal };
+      APP_STATE.footer = { text_main: mainVal, text_sub: subVal, text_dev: devVal };
+      APP_STATE.settings = {
+        ...APP_STATE.settings,
+        footer_text_main: mainVal,
+        footer_text_sub: subVal,
+        footer_text_dev: devVal
+      };
       renderFooter();
 
       // Sync with Tab 4 inputs if present
       const t4Main = document.getElementById('input-footer-main');
       const t4Sub = document.getElementById('input-footer-sub');
+      const t4Dev = document.getElementById('input-footer-dev');
       if (t4Main) t4Main.value = mainVal;
       if (t4Sub) t4Sub.value = subVal;
+      if (t4Dev) t4Dev.value = devVal;
+      updateFooterLivePreview();
 
       closeFooterEditorModal();
       Swal.fire({ title: 'กำลังบันทึกข้อมูลท้ายเว็บ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
       try {
         const res = await callBackend('saveFooterSettings', APP_STATE.footer);
+        SafeStorage.removeItem(APP_RUNTIME_CONFIG.PUBLIC_CACHE_KEY);
+        SafeStorage.removeItem(APP_RUNTIME_CONFIG.ADMIN_DATA_CACHE_KEY);
         Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ', text: (res && res.message) ? res.message : 'บันทึกข้อมูลท้ายเว็บเรียบร้อยแล้ว', timer: 1500, showConfirmButton: false });
       } catch (err) {
         Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: err.toString() });
