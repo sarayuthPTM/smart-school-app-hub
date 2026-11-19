@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Smart School Web App Hub - ศูนย์รวมระบบสารสนเทศสถานศึกษา</title>
+  <meta name="description" content="ศูนย์รวมระบบสารสนเทศและเว็บแอปพลิเคชันกลุ่มบริหารงานบุคคล เข้าถึงระบบงานดิจิทัลทั้งหมดได้สะดวกรวดเร็วในจุดเดียว">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Smart School Web App Hub">
+  <meta property="og:title" content="Smart School Web App Hub - ศูนย์รวมระบบสารสนเทศสถานศึกษา">
+  <meta property="og:description" content="ศูนย์รวมระบบสารสนเทศและเว็บแอปพลิเคชันกลุ่มบริหารงานบุคคล เข้าถึงระบบงานดิจิทัลทั้งหมดได้สะดวกรวดเร็วในจุดเดียว">
+  <meta property="og:image" content="https://kbs-app-hub.vercel.app/icon-512.png">
+  <meta property="og:url" content="https://kbs-app-hub.vercel.app/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Smart School Web App Hub - ศูนย์รวมระบบสารสนเทศสถานศึกษา">
+  <meta name="twitter:description" content="ศูนย์รวมระบบสารสนเทศและเว็บแอปพลิเคชันกลุ่มบริหารงานบุคคล เข้าถึงระบบงานดิจิทัลทั้งหมดได้สะดวกรวดเร็วในจุดเดียว">
+  <meta name="twitter:image" content="https://kbs-app-hub.vercel.app/icon-512.png">
   <meta name="theme-color" content="#0f172a">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
@@ -169,22 +180,9 @@
   </header>
 
   <!-- ============================================================ -->
-  <!-- MAINTENANCE MODE BANNER                                      -->
+  <!-- MAINTENANCE MODE BANNER (Populated dynamically when active)  -->
   <!-- ============================================================ -->
-  <div id="maintenance-banner" class="hidden bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white px-4 py-3 shadow-md transition-all">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm">
-      <div class="flex items-center space-x-2.5">
-        <i data-lucide="alert-triangle" class="w-5 h-5 animate-pulse text-white"></i>
-        <div>
-          <span class="font-bold">⚠️ แจ้งเตือนปิดปรับปรุงระบบชั่วคราว:</span>
-          <span id="maintenance-banner-msg" class="ml-1 opacity-95">ระบบกำลังอยู่ระหว่างการบำรุงรักษา</span>
-        </div>
-      </div>
-      <button onclick="handleAdminButtonClick()" class="px-3.5 py-1 rounded-lg bg-black/25 hover:bg-black/40 border border-white/20 text-xs font-bold transition">
-        เข้าสู่ระบบหลังบ้าน (Admin PIN)
-      </button>
-    </div>
-  </div>
+  <div id="maintenance-banner" class="hidden bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white px-4 py-3 shadow-md transition-all"></div>
 
   <!-- ============================================================ -->
   <!-- BROADCAST BANNER COMPONENT                                   -->
@@ -4285,10 +4283,25 @@
 
       if (maintBanner) {
         if (isMaint) {
+          maintBanner.innerHTML = `
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm">
+              <div class="flex items-center space-x-2.5">
+                <i data-lucide="alert-triangle" class="w-5 h-5 animate-pulse text-white"></i>
+                <div>
+                  <span class="font-bold">⚠️ แจ้งเตือนปิดปรับปรุงระบบชั่วคราว:</span>
+                  <span id="maintenance-banner-msg" class="ml-1 opacity-95">${escapeHTML(customMsg)}</span>
+                </div>
+              </div>
+              <button onclick="handleAdminButtonClick()" class="px-3.5 py-1 rounded-lg bg-black/25 hover:bg-black/40 border border-white/20 text-xs font-bold transition">
+                เข้าสู่ระบบหลังบ้าน (Admin PIN)
+              </button>
+            </div>
+          `;
           maintBanner.classList.remove('hidden');
-          if (maintMsg) maintMsg.textContent = customMsg;
+          safeCreateIcons();
         } else {
           maintBanner.classList.add('hidden');
+          maintBanner.innerHTML = '';
         }
       }
 
