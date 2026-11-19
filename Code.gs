@@ -18,6 +18,7 @@ var CONFIG = {
   DEFAULT_ADMIN_PIN: '123456',
   DEFAULT_APP_LOCK_PIN: '888888',
   CACHE_KEY_PUBLIC: 'smart_school_hub_public_data_v1',
+  CACHE_KEY_ADMIN: 'smart_school_hub_admin_data_v1',
   CACHE_TTL_SECONDS: 21600, // 6 Hours (21,600s)
   TIMEZONE: 'Asia/Bangkok',
   SHEETS: {
@@ -148,7 +149,7 @@ function dispatchApiAction(action, payload, adminToken) {
   };
 
   var ADMIN_HANDLERS = {
-    getAdminData: function() { return getAdminData(); },
+    getAdminData: function(p) { return getAdminData(Boolean(p && p.forceRefresh === true)); },
     saveAllApps: function(p) { return saveAllApps(p); },
     saveAnnouncement: function(p) { return saveAnnouncement(p); },
     saveCategories: function(p) { return saveCategories(p); },
@@ -355,7 +356,7 @@ function getPublicData(forceRefresh) {
 function invalidateCache() {
   try {
     var cache = CacheService.getScriptCache();
-    cache.remove(CONFIG.CACHE_KEY_PUBLIC);
+    cache.removeAll([CONFIG.CACHE_KEY_PUBLIC, CONFIG.CACHE_KEY_ADMIN]);
   } catch (e) {
     Logger.log('Cache removal error: ' + e);
   }
@@ -491,6 +492,7 @@ function reportIssue(issueData) {
       createdAtStr
     ]);
 
+    invalidateCache();
     return { success: true, message: 'ส่งรายงานปัญหาเรียบร้อยแล้ว เจ้าหน้าที่จะดำเนินการตรวจสอบ' };
   } catch (err) {
     Logger.log('Error in reportIssue: ' + err);
@@ -604,12 +606,16 @@ function setSettingValue(key, value, description) {
  * Gets Admin PIN from Settings sheet (primary), PropertiesService (secondary), or CONFIG default
  */
 function getAdminPin() {
+  var props = PropertiesService.getScriptProperties();
   var pinFromSheet = getSettingValue('admin_pin', null);
   if (pinFromSheet) {
-    try { PropertiesService.getScriptProperties().setProperty('ADMIN_PIN', pinFromSheet); } catch(e){}
+    try {
+      if (props.getProperty('ADMIN_PIN') !== pinFromSheet) {
+        props.setProperty('ADMIN_PIN', pinFromSheet);
+      }
+    } catch(e){}
     return pinFromSheet;
   }
-  var props = PropertiesService.getScriptProperties();
   var pinFromProps = props.getProperty('ADMIN_PIN');
   if (pinFromProps) {
     setSettingValue('admin_pin', pinFromProps, 'รหัสผ่านเข้าสู่ระบบผู้ดูแลระบบ (Admin PIN 6 หลัก)');
@@ -657,16 +663,22 @@ function setAppLockPin(newPin) {
 }
 
 /**
- * Verifies Admin PIN Code
- * @param {string} pin - Input PIN
+ * Verifies Admin PIN Code (optionally returns adminData in the same round-trip for instant login)
+ * @param {string|Object} payload - Input PIN string or { pin, includeAdminData }
  */
-function verifyAdminPin(pin) {
+function verifyAdminPin(payload) {
+  var pin = (payload && typeof payload === 'object') ? payload.pin : payload;
+  var includeAdminData = Boolean(payload && typeof payload === 'object' && payload.includeAdminData === true);
   var configuredPin = getAdminPin();
-  if (String(pin).trim() === String(configuredPin).trim()) {
-    return {
+  if (String(pin || '').trim() === String(configuredPin).trim()) {
+    var result = {
       success: true,
       adminToken: createAdminSessionToken()
     };
+    if (includeAdminData) {
+      result.adminData = getAdminData(false);
+    }
+    return result;
   } else {
     return { success: false, message: 'รหัสผ่าน PIN ไม่ถูกต้อง' };
   }
@@ -717,8 +729,20 @@ function changeAppLockPin(payload) {
 
 /**
  * Fetches all admin data: KPIs, Analytics Charts, Apps, Announcements, and Issue Reports
+ * Uses CacheService RAM cache unless forceRefresh === true
  */
-function getAdminData() {
+function getAdminData(forceRefresh) {
+  var isForce = (forceRefresh === true || (forceRefresh && typeof forceRefresh === 'object' && forceRefresh.forceRefresh === true));
+  var cache = CacheService.getScriptCache();
+  if (!isForce) {
+    try {
+      var cached = cache.get(CONFIG.CACHE_KEY_ADMIN);
+      if (cached) {
+        return JSON.parse(cached);
+      }
+    } catch (e) {}
+  }
+
   try {
     var ss = getSpreadsheet();
     var appsSheet = ss.getSheetByName(CONFIG.SHEETS.APPS);
@@ -930,7 +954,7 @@ function getAdminData() {
     var topCatName = Object.keys(categoryUsageMap).sort(function(a,b){ return categoryUsageMap[b] - categoryUsageMap[a]; })[0] || 'กลุ่มบริหารทั่วไป';
     var mobPercent = Math.round((deviceCounts['Mobile'] / Math.max(deviceCounts['Mobile'] + deviceCounts['Desktop'], 1)) * 100);
 
-    return {
+    var adminPayload = {
       success: true,
       spreadsheetUrl: ss.getUrl(),
       kpis: {
@@ -961,6 +985,14 @@ function getAdminData() {
       announcement: announcement,
       reports: reports.reverse() // latest reports first
     };
+
+    try {
+      cache.put(CONFIG.CACHE_KEY_ADMIN, JSON.stringify(adminPayload), CONFIG.CACHE_TTL_SECONDS);
+    } catch (cachePutErr) {
+      Logger.log('Admin cache put warning: ' + cachePutErr);
+    }
+
+    return adminPayload;
   } catch (error) {
     Logger.log('Error in getAdminData: ' + error);
     return { success: false, message: error.toString() };
@@ -1416,6 +1448,7 @@ function resolveIssue(reportId) {
     for (var i = 1; i < data.length; i++) {
       if (String(data[i][0]) === String(reportId)) {
         sheet.getRange(i + 1, 6).setValue('resolved');
+        invalidateCache();
         return { success: true, message: 'ปรับปรุงสถานะเป็นแก้ไขแล้วเรียบร้อย' };
       }
     }
@@ -1443,6 +1476,7 @@ function deleteIssueReport(reportId) {
     for (var i = 1; i < data.length; i++) {
       if (String(data[i][0]) === String(reportId)) {
         sheet.deleteRow(i + 1);
+        invalidateCache();
         return { success: true, message: 'ลบรายการแจ้งปัญหาเรียบร้อยแล้ว' };
       }
     }

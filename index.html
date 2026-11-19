@@ -2018,6 +2018,7 @@
       // Built from parts so GAS HtmlService sanitizer never truncates literal strings
       GAS_API_URL: ['https:/', '/script.google.com', '/macros/s/AKfycbxSLuieqBt7QCTbd_WCZtSyy0JT-0GuAQSIqTgdsO2iuHcAJd0MCI6zPGRMFWuqD2_xGw/exec'].join(''),
       PUBLIC_CACHE_KEY: 'smart_school_hub_public_data_v2',
+      ADMIN_DATA_CACHE_KEY: 'smart_school_hub_admin_data_v1',
       ADMIN_AUTH_KEY: 'smart_school_admin_auth',
       ADMIN_TOKEN_KEY: 'smart_school_admin_token'
     };
@@ -2036,7 +2037,9 @@
     function clearAdminSession() {
       sessionStorage.removeItem(APP_RUNTIME_CONFIG.ADMIN_AUTH_KEY);
       sessionStorage.removeItem(APP_RUNTIME_CONFIG.ADMIN_TOKEN_KEY);
+      sessionStorage.removeItem(APP_RUNTIME_CONFIG.ADMIN_DATA_CACHE_KEY);
       APP_STATE.adminAuthenticated = false;
+      APP_STATE.adminData = null;
     }
 
     async function callBackend(action, payload) {
@@ -2080,7 +2083,11 @@
             switchView('portal');
           }
           openPinModal();
-          throw new Error(data.message || 'เซสชันผู้ดูแลระบบหมดอายุ กรุณากรอกรหัส PIN ใหม่อีกครั้ง');
+          throw new Error(data.message || 'เซสชันผู้ดูแลระบบหมดอายุ กรุณายืนยันรหัส PIN ใหม่อีกครั้ง');
+        }
+        if (data && data.success && ADMIN_API_ACTIONS.has(action) && action !== 'getAdminData') {
+          sessionStorage.removeItem(APP_RUNTIME_CONFIG.ADMIN_DATA_CACHE_KEY);
+          SafeStorage.removeItem(APP_RUNTIME_CONFIG.PUBLIC_CACHE_KEY);
         }
         return data;
       }
@@ -2851,6 +2858,31 @@
     }
 
     // 7. ADMIN AUTHENTICATION
+    function cacheAdminDataLocal(data) {
+      if (!data || !data.success) return;
+      APP_STATE.adminData = data;
+      if (data.spreadsheetUrl) APP_STATE.spreadsheetUrl = data.spreadsheetUrl;
+      try {
+        sessionStorage.setItem(APP_RUNTIME_CONFIG.ADMIN_DATA_CACHE_KEY, JSON.stringify(data));
+      } catch (e) {}
+    }
+
+    function restoreAdminDataFromSession() {
+      try {
+        const raw = sessionStorage.getItem(APP_RUNTIME_CONFIG.ADMIN_DATA_CACHE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.success) {
+            APP_STATE.adminData = parsed;
+            if (parsed.spreadsheetUrl) APP_STATE.spreadsheetUrl = parsed.spreadsheetUrl;
+            applyAdminDataToUI(parsed);
+            return true;
+          }
+        }
+      } catch (e) {}
+      return false;
+    }
+
     function handleAdminButtonClick() {
       if (APP_STATE.view === 'admin') {
         switchView('portal');
@@ -2861,7 +2893,8 @@
       if (hasSessionFlag && hasServerToken) {
         APP_STATE.adminAuthenticated = true;
         switchView('admin');
-        loadAdminData();
+        const restored = restoreAdminDataFromSession();
+        loadAdminData({ silent: restored });
       } else {
         openPinModal();
       }
@@ -2895,7 +2928,7 @@
       btn.innerHTML = 'กำลังตรวจสอบ...';
 
       try {
-        const res = await callBackend('verifyAdminPin', pin);
+        const res = await callBackend('verifyAdminPin', { pin, includeAdminData: true });
         if (res && res.success) {
           sessionStorage.setItem(APP_RUNTIME_CONFIG.ADMIN_AUTH_KEY, 'true');
           if (res.adminToken) {
@@ -2904,7 +2937,12 @@
           APP_STATE.adminAuthenticated = true;
           closePinModal();
           switchView('admin');
-          loadAdminData();
+          if (res.adminData && res.adminData.success) {
+            cacheAdminDataLocal(res.adminData);
+            applyAdminDataToUI(res.adminData);
+          } else {
+            loadAdminData();
+          }
         } else {
           Swal.fire({ icon: 'error', title: (res && res.message) ? res.message : 'รหัสผ่าน PIN ไม่ถูกต้อง', confirmButtonColor: '#1e3a8a' });
         }
@@ -3050,25 +3088,33 @@
       safeCreateIcons();
     }
 
-    async function loadAdminData() {
+    async function loadAdminData(options = {}) {
+      const shouldShowLoader = !options.silent && (!APP_STATE.adminData || options.forceRefresh);
       try {
-        Swal.showLoading();
-        const data = await callBackend('getAdminData', {});
-        Swal.close();
-
+        if (shouldShowLoader) {
+          Swal.fire({
+            title: 'กำลังโหลดข้อมูลหลังบ้าน...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => Swal.showLoading()
+          });
+        }
+        const data = await callBackend('getAdminData', { forceRefresh: Boolean(options.forceRefresh) });
         if (data && data.success) {
-          APP_STATE.adminData = data;
-          if (data.spreadsheetUrl) APP_STATE.spreadsheetUrl = data.spreadsheetUrl;
+          cacheAdminDataLocal(data);
           applyAdminDataToUI(data);
         }
       } catch (err) {
-        Swal.close();
         console.error('loadAdminData error:', err);
+      } finally {
+        if (shouldShowLoader) {
+          Swal.close();
+        }
       }
     }
 
     function refreshAdminData() {
-      loadAdminData();
+      loadAdminData({ forceRefresh: true });
     }
 
     function openGoogleSheets() {
