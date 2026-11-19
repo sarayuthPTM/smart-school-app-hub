@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Smart School Web App Hub - ศูนย์รวมระบบสารสนเทศสถานศึกษา</title>
+  <meta name="theme-color" content="#0f172a">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
 
   <!-- Google Fonts: Prompt -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,8 +126,19 @@
         
         <!-- Logo & Organization Title -->
         <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer min-w-0" onclick="switchView('portal')">
-          <div id="school-logo-container" class="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-tr from-blue-900 to-indigo-800 flex items-center justify-center shadow-md shadow-blue-900/20 text-amber-400 overflow-hidden shrink-0">
-            <i id="school-default-logo-icon" data-lucide="graduation-cap" class="w-4 h-4 sm:w-7 sm:h-7"></i>
+          <div id="school-logo-container" class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-[#0f172a] to-[#1e3a8a] flex items-center justify-center shadow-md shadow-blue-900/25 overflow-hidden shrink-0">
+            <span id="school-default-logo-icon" class="w-full h-full flex items-center justify-center">
+              <img src="/logo.png" alt="Smart School App Hub" class="w-full h-full object-cover" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+              <svg viewBox="0 0 64 64" class="hidden w-7 h-7 sm:w-9 sm:h-9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 10L12 19L32 28L52 19L32 10Z" fill="#fbbf24"/>
+                <path d="M21 24V31C21 31 26 34 32 34C38 34 43 31 43 31V24L32 29L21 24Z" fill="#f59e0b"/>
+                <path d="M16 22V39C16 47 32 54 32 54C32 54 48 47 48 39V25" stroke="#fbbf24" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="22" y="34" width="8.5" height="8.5" rx="2.2" fill="#fbbf24"/>
+                <rect x="22" y="44" width="8.5" height="8.5" rx="2.2" fill="#f59e0b"/>
+                <rect x="33.5" y="44" width="8.5" height="8.5" rx="2.2" fill="#f59e0b"/>
+                <path d="M37.75 33.5L39.2 36.8L42.5 38.25L39.2 39.7L37.75 43L36.3 39.7L33 38.25L36.3 36.8L37.75 33.5Z" fill="#fbbf24"/>
+              </svg>
+            </span>
             <img id="school-logo-img" src="" alt="School Logo" class="hidden w-full h-full object-cover">
           </div>
           <div class="min-w-0">
