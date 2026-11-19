@@ -9,17 +9,17 @@
   <meta property="og:site_name" content="Smart School Web App Hub">
   <meta property="og:title" content="Smart School Web App Hub - ศูนย์รวมระบบสารสนเทศสถานศึกษา">
   <meta property="og:description" content="ศูนย์รวมระบบสารสนเทศและเว็บแอปพลิเคชันกลุ่มบริหารงานบุคคล เข้าถึงระบบงานดิจิทัลทั้งหมดได้สะดวกรวดเร็วในจุดเดียว">
-  <meta property="og:image" content="https://kbs-app-hub.vercel.app/icon-512.png">
+  <meta property="og:image" content="https://kbs-app-hub.vercel.app/icon-512.png?v=5">
   <meta property="og:url" content="https://kbs-app-hub.vercel.app/">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Smart School Web App Hub - ศูนย์รวมระบบสารสนเทศสถานศึกษา">
   <meta name="twitter:description" content="ศูนย์รวมระบบสารสนเทศและเว็บแอปพลิเคชันกลุ่มบริหารงานบุคคล เข้าถึงระบบงานดิจิทัลทั้งหมดได้สะดวกรวดเร็วในจุดเดียว">
-  <meta name="twitter:image" content="https://kbs-app-hub.vercel.app/icon-512.png">
+  <meta name="twitter:image" content="https://kbs-app-hub.vercel.app/icon-512.png?v=5">
   <meta name="theme-color" content="#0f172a">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=5">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5">
+  <link rel="manifest" href="/manifest.json?v=5">
 
   <!-- Google Fonts: Prompt -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -137,17 +137,18 @@
         
         <!-- Logo & Organization Title -->
         <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer min-w-0" onclick="switchView('portal')">
-          <div id="school-logo-container" class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-[#0f172a] to-[#1e3a8a] flex items-center justify-center shadow-md shadow-blue-900/25 overflow-hidden shrink-0">
+          <div id="school-logo-container" class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm overflow-hidden shrink-0">
             <span id="school-default-logo-icon" class="w-full h-full flex items-center justify-center">
-              <img src="/logo.png" alt="Smart School App Hub" class="w-full h-full object-cover" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
-              <svg viewBox="0 0 64 64" class="hidden w-7 h-7 sm:w-9 sm:h-9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M32 10L12 19L32 28L52 19L32 10Z" fill="#fbbf24"/>
-                <path d="M21 24V31C21 31 26 34 32 34C38 34 43 31 43 31V24L32 29L21 24Z" fill="#f59e0b"/>
-                <path d="M16 22V39C16 47 32 54 32 54C32 54 48 47 48 39V25" stroke="#fbbf24" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
-                <rect x="22" y="34" width="8.5" height="8.5" rx="2.2" fill="#fbbf24"/>
-                <rect x="22" y="44" width="8.5" height="8.5" rx="2.2" fill="#f59e0b"/>
-                <rect x="33.5" y="44" width="8.5" height="8.5" rx="2.2" fill="#f59e0b"/>
-                <path d="M37.75 33.5L39.2 36.8L42.5 38.25L39.2 39.7L37.75 43L36.3 39.7L33 38.25L36.3 36.8L37.75 33.5Z" fill="#fbbf24"/>
+              <img src="/logo.png?v=5" alt="Smart School App Hub" class="w-full h-full object-cover" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+              <svg viewBox="0 0 64 64" class="hidden w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="64" height="64" rx="14" fill="#f8fafc"/>
+                <rect x="11" y="11" width="42" height="42" rx="11" fill="#1e3a8a"/>
+                <rect x="19" y="19" width="11.5" height="11.5" rx="3" fill="#ffffff"/>
+                <rect x="33.5" y="19" width="11.5" height="11.5" rx="3" fill="#f59e0b"/>
+                <rect x="19" y="33.5" width="11.5" height="11.5" rx="3" fill="#e2e8f0"/>
+                <rect x="33.5" y="33.5" width="11.5" height="11.5" rx="3" fill="#ffffff"/>
+                <circle cx="32" cy="32" r="4.8" fill="#0f172a"/>
+                <circle cx="32" cy="32" r="2.8" fill="#fbbf24"/>
               </svg>
             </span>
             <img id="school-logo-img" src="" alt="School Logo" class="hidden w-full h-full object-cover">
