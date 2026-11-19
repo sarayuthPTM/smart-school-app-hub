@@ -9,17 +9,17 @@
   <meta property="og:site_name" content="Smart School Web App Hub">
   <meta property="og:title" content="Smart School Web App Hub - ศูนย์รวมระบบสารสนเทศสถานศึกษา">
   <meta property="og:description" content="ศูนย์รวมระบบสารสนเทศและเว็บแอปพลิเคชันกลุ่มบริหารงานบุคคล เข้าถึงระบบงานดิจิทัลทั้งหมดได้สะดวกรวดเร็วในจุดเดียว">
-  <meta property="og:image" content="https://kbs-app-hub.vercel.app/icon-512.png?v=5">
+  <meta property="og:image" content="https://kbs-app-hub.vercel.app/icon-512.png?v=6">
   <meta property="og:url" content="https://kbs-app-hub.vercel.app/">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Smart School Web App Hub - ศูนย์รวมระบบสารสนเทศสถานศึกษา">
   <meta name="twitter:description" content="ศูนย์รวมระบบสารสนเทศและเว็บแอปพลิเคชันกลุ่มบริหารงานบุคคล เข้าถึงระบบงานดิจิทัลทั้งหมดได้สะดวกรวดเร็วในจุดเดียว">
-  <meta name="twitter:image" content="https://kbs-app-hub.vercel.app/icon-512.png?v=5">
+  <meta name="twitter:image" content="https://kbs-app-hub.vercel.app/icon-512.png?v=6">
   <meta name="theme-color" content="#0f172a">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=5">
-  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=5">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5">
-  <link rel="manifest" href="/manifest.json?v=5">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=6">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=6">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=6">
+  <link rel="manifest" href="/manifest.json?v=6">
 
   <!-- Google Fonts: Prompt -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -137,18 +137,17 @@
         
         <!-- Logo & Organization Title -->
         <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer min-w-0" onclick="switchView('portal')">
-          <div id="school-logo-container" class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm overflow-hidden shrink-0">
+          <div id="school-logo-container" class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center overflow-hidden shrink-0">
             <span id="school-default-logo-icon" class="w-full h-full flex items-center justify-center">
-              <img src="/logo.png?v=5" alt="Smart School App Hub" class="w-full h-full object-cover" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+              <img src="/logo.png?v=6" alt="Smart School App Hub" class="w-full h-full object-contain" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
               <svg viewBox="0 0 64 64" class="hidden w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="64" height="64" rx="14" fill="#f8fafc"/>
-                <rect x="11" y="11" width="42" height="42" rx="11" fill="#1e3a8a"/>
-                <rect x="19" y="19" width="11.5" height="11.5" rx="3" fill="#ffffff"/>
-                <rect x="33.5" y="19" width="11.5" height="11.5" rx="3" fill="#f59e0b"/>
-                <rect x="19" y="33.5" width="11.5" height="11.5" rx="3" fill="#e2e8f0"/>
-                <rect x="33.5" y="33.5" width="11.5" height="11.5" rx="3" fill="#ffffff"/>
-                <circle cx="32" cy="32" r="4.8" fill="#0f172a"/>
-                <circle cx="32" cy="32" r="2.8" fill="#fbbf24"/>
+                <rect x="2" y="2" width="60" height="60" rx="15" fill="#172554"/>
+                <rect x="11" y="11" width="19" height="19" rx="5" fill="#ffffff"/>
+                <rect x="34" y="11" width="19" height="19" rx="5" fill="#f59e0b"/>
+                <rect x="11" y="34" width="19" height="19" rx="5" fill="#cbd5e1"/>
+                <rect x="34" y="34" width="19" height="19" rx="5" fill="#ffffff"/>
+                <circle cx="32" cy="32" r="6.5" fill="#0f172a"/>
+                <circle cx="32" cy="32" r="4" fill="#fbbf24"/>
               </svg>
             </span>
             <img id="school-logo-img" src="" alt="School Logo" class="hidden w-full h-full object-cover">
@@ -4223,10 +4222,6 @@
       // Hero background
       const hero = document.querySelector('#view-portal section');
       if (hero && hero.style) hero.style.background = theme.gradient;
-
-      // School logo badge background
-      const logoBox = document.getElementById('school-logo-container');
-      if (logoBox && logoBox.style) logoBox.style.background = theme.gradient;
 
       const badge = document.getElementById('current-theme-badge');
       if (badge) badge.textContent = theme.name;
