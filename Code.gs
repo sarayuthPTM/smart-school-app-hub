@@ -888,6 +888,10 @@ function getAdminData(forceRefresh) {
     for (var l = 1; l < logsData.length; l++) {
       var lRow = logsData[l];
       if (!lRow[0]) continue;
+      if (String(lRow[0]).indexOf('LOG-SEED-') === 0) {
+        staleLogsCount++;
+        continue; // Skip synthetic setup seed logs
+      }
 
       var rawAppId = String(lRow[1] || '').trim();
       var rawTitle = String(lRow[2] || '').trim();
@@ -2091,6 +2095,10 @@ function pruneStaleLogs() {
     for (var l = 1; l < logsData.length; l++) {
       var r = logsData[l];
       if (!r[0]) continue;
+      if (String(r[0]).indexOf('LOG-SEED-') === 0) {
+        removedCount++;
+        continue;
+      }
       var appId = String(r[1] || '').trim();
       var appTitle = String(r[2] || '').trim();
       var matched = activeById[appId] || activeByTitle[appTitle];
