@@ -163,6 +163,7 @@ function dispatchApiAction(action, payload, adminToken) {
     changeAppLockPin: function(p) { return changeAppLockPin(p); },
     resolveIssue: function(p) { return resolveIssue(p); },
     deleteIssueReport: function(p) { return deleteIssueReport(p); },
+    pruneStaleLogs: function() { return pruneStaleLogs(); },
     clearServerCache: function() { return clearServerCache(); }
   };
 
@@ -416,7 +417,7 @@ function recordClick(payload) {
     var logTimeStr = Utilities.formatDate(now, CONFIG.TIMEZONE, 'HH:mm:ss');
     var logId = 'LOG-' + now.getTime() + '-' + Math.floor(Math.random() * 1000);
 
-    // 1. Append log row
+    // 1. Append log row (force plain text format on date/time columns so Sheets never casts time to 1899 Date)
     logsSheet.appendRow([
       logId,
       payload.appId,
@@ -426,6 +427,8 @@ function recordClick(payload) {
       logDateStr,
       logTimeStr
     ]);
+    var newLogRowIdx = logsSheet.getLastRow();
+    logsSheet.getRange(newLogRowIdx, 6, 1, 2).setNumberFormat('@').setValues([[logDateStr, logTimeStr]]);
 
     // 2. Increment click count in Apps sheet
     var appsData = appsSheet.getDataRange().getValues();
@@ -838,7 +841,18 @@ function getAdminData(forceRefresh) {
       });
     }
 
-    // 4. Analytics & Logs Processing
+    // 4. Analytics & Logs Processing (ONLY active apps currently in Apps sheet)
+    var activeAppById = {};
+    var activeAppByTitle = {};
+    var categoryAppCounts = {};
+    for (var aIdx = 0; aIdx < apps.length; aIdx++) {
+      var actApp = apps[aIdx];
+      activeAppById[String(actApp.id)] = actApp;
+      if (actApp.title) activeAppByTitle[String(actApp.title).trim()] = actApp;
+      var actCat = actApp.category || 'กลุ่มบริหารทั่วไป';
+      categoryAppCounts[actCat] = (categoryAppCounts[actCat] || 0) + 1;
+    }
+
     var logsData = logsSheet.getDataRange().getValues();
     var todayStr = Utilities.formatDate(new Date(), CONFIG.TIMEZONE, 'yyyy-MM-dd');
     var todayClicks = 0;
@@ -855,72 +869,102 @@ function getAdminData(forceRefresh) {
       dailyClicksMap[dKey] = 0;
     }
 
-    // Category Distribution Map
+    // Category Distribution Map (initialized only for categories that have active apps)
     var currentCategories = getCategories();
     var categoryUsageMap = {};
     for (var cIdx = 0; cIdx < currentCategories.length; cIdx++) {
-      categoryUsageMap[currentCategories[cIdx]] = 0;
+      var cName = currentCategories[cIdx];
+      if (categoryAppCounts[cName] > 0) {
+        categoryUsageMap[cName] = 0;
+      }
     }
 
     // Device breakdown map & Peak hours distribution (6 slots)
     var deviceCounts = { 'Mobile': 0, 'Desktop': 0 };
     var peakHourCounts = [0, 0, 0, 0, 0, 0];
+    var recentLogs = [];
+    var staleLogsCount = 0;
 
     for (var l = 1; l < logsData.length; l++) {
       var lRow = logsData[l];
       if (!lRow[0]) continue;
-      var logDate = String(lRow[5]);
-      var cat = String(lRow[3]);
-      var dev = String(lRow[4] || 'Desktop');
-      var timeStr = String(lRow[6] || '');
+
+      var rawAppId = String(lRow[1] || '').trim();
+      var rawTitle = String(lRow[2] || '').trim();
+      var matchedApp = activeAppById[rawAppId] || activeAppByTitle[rawTitle];
+      if (!matchedApp) {
+        staleLogsCount++;
+        continue; // Skip logs from deleted/seed apps not in current system
+      }
+
+      var logDate = normalizeLogDate(lRow[5]);
+      var timeStr = normalizeLogTime(lRow[6]);
+      var cat = matchedApp.category || String(lRow[3] || 'กลุ่มบริหารทั่วไป');
+      var devRaw = String(lRow[4] || 'Desktop');
+      var devNormalized = devRaw.toLowerCase().indexOf('mobile') !== -1 ? 'Mobile' : 'Desktop';
 
       if (logDate === todayStr) {
         todayClicks++;
       }
 
-      if (dailyClicksMap.hasOwnProperty(logDate)) {
+      if (logDate && dailyClicksMap.hasOwnProperty(logDate)) {
         dailyClicksMap[logDate]++;
       }
 
-      if (categoryUsageMap.hasOwnProperty(cat)) {
-        categoryUsageMap[cat]++;
-      } else {
-        categoryUsageMap[cat] = (categoryUsageMap[cat] || 0) + 1;
-      }
+      categoryUsageMap[cat] = (categoryUsageMap[cat] || 0) + 1;
 
-      if (dev.toLowerCase().indexOf('mobile') !== -1) {
+      if (devNormalized === 'Mobile') {
         deviceCounts['Mobile']++;
       } else {
         deviceCounts['Desktop']++;
       }
 
       if (timeStr) {
-        var hour = parseInt(timeStr.split(':')[0], 10);
-        var min = parseInt(timeStr.split(':')[1] || '0', 10);
-        var timeVal = hour + (min / 60);
-        if (timeVal >= 6 && timeVal < 8.5) peakHourCounts[0]++;
-        else if (timeVal >= 8.5 && timeVal < 11.5) peakHourCounts[1]++;
-        else if (timeVal >= 11.5 && timeVal < 13) peakHourCounts[2]++;
-        else if (timeVal >= 13 && timeVal < 15.5) peakHourCounts[3]++;
-        else if (timeVal >= 15.5 && timeVal < 18) peakHourCounts[4]++;
-        else peakHourCounts[5]++;
+        var parts = timeStr.split(':');
+        var hour = parseInt(parts[0], 10);
+        var min = parseInt(parts[1] || '0', 10);
+        if (!isNaN(hour)) {
+          var timeVal = hour + ((isNaN(min) ? 0 : min) / 60);
+          if (timeVal >= 6 && timeVal < 8.5) peakHourCounts[0]++;
+          else if (timeVal >= 8.5 && timeVal < 11.5) peakHourCounts[1]++;
+          else if (timeVal >= 11.5 && timeVal < 13) peakHourCounts[2]++;
+          else if (timeVal >= 13 && timeVal < 15.5) peakHourCounts[3]++;
+          else if (timeVal >= 15.5 && timeVal < 18) peakHourCounts[4]++;
+          else peakHourCounts[5]++;
+        }
+      }
+
+      recentLogs.push({
+        log_id: String(lRow[0]),
+        app_id: matchedApp.id,
+        title: matchedApp.title,
+        category: cat,
+        icon: matchedApp.icon || 'globe',
+        color: matchedApp.color || 'blue',
+        device: devNormalized,
+        date: logDate,
+        time: timeStr
+      });
+    }
+
+    // Ensure at least active apps' click counts are reflected if category had 0 log rows yet
+    var totalCatLogClicks = Object.keys(categoryUsageMap).reduce(function(sum, k) { return sum + (categoryUsageMap[k] || 0); }, 0);
+    if (totalCatLogClicks === 0 && apps.length > 0) {
+      for (var caIdx = 0; caIdx < apps.length; caIdx++) {
+        var ca = apps[caIdx];
+        var caName = ca.category || 'กลุ่มบริหารทั่วไป';
+        categoryUsageMap[caName] = (categoryUsageMap[caName] || 0) + Number(ca.click_count || 0);
       }
     }
 
-    // Default seeds if logging just started
-    if (deviceCounts['Mobile'] === 0 && deviceCounts['Desktop'] === 0) {
-      deviceCounts['Mobile'] = Math.round(totalUsage * 0.65) || 142;
-      deviceCounts['Desktop'] = Math.round(totalUsage * 0.35) || 78;
-    }
-    if (peakHourCounts.reduce(function(a,b){return a+b;},0) === 0) {
-      peakHourCounts = [
-        Math.round(totalUsage * 0.22) || 45,
-        Math.round(totalUsage * 0.28) || 68,
-        Math.round(totalUsage * 0.18) || 38,
-        Math.round(totalUsage * 0.15) || 32,
-        Math.round(totalUsage * 0.12) || 26,
-        Math.round(totalUsage * 0.05) || 11
-      ];
+    // Sort recent logs newest first and limit to 100 rows
+    recentLogs.sort(function(a, b) {
+      var ta = (a.date || '') + ' ' + (a.time || '');
+      var tb = (b.date || '') + ' ' + (b.time || '');
+      return tb.localeCompare(ta);
+    });
+    if (recentLogs.length > 100) {
+      recentLogs = recentLogs.slice(0, 100);
     }
 
     // Top 5 Apps by click count
@@ -928,35 +972,55 @@ function getAdminData(forceRefresh) {
       return b.click_count - a.click_count;
     });
     var top5Apps = sortedApps.slice(0, 5);
+    var topAppName = top5Apps.length > 0 && top5Apps[0].click_count > 0 ? top5Apps[0].title : (apps[0] ? apps[0].title : '-');
 
     // Format chart datasets
+    var trendValues = past7Days.map(function(item) { return dailyClicksMap[item.key] || 0; });
+    var trendTotal = trendValues.reduce(function(sum, v) { return sum + v; }, 0);
     var trendChartData = {
       labels: past7Days.map(function(item) { return item.label; }),
-      data: past7Days.map(function(item) { return dailyClicksMap[item.key] || 0; })
+      data: trendValues,
+      total: trendTotal
     };
 
+    var catKeys = Object.keys(categoryUsageMap);
+    if (catKeys.length === 0 && currentCategories.length > 0) {
+      catKeys = [currentCategories[0]];
+      categoryUsageMap[catKeys[0]] = 0;
+    }
     var categoryChartData = {
-      labels: Object.keys(categoryUsageMap),
-      data: Object.values(categoryUsageMap)
+      labels: catKeys,
+      data: catKeys.map(function(k) { return categoryUsageMap[k] || 0; })
     };
 
     var topAppsChartData = {
-      labels: top5Apps.map(function(item) { return item.title.length > 20 ? item.title.substring(0, 18) + '...' : item.title; }),
-      data: top5Apps.map(function(item) { return item.click_count; })
+      labels: top5Apps.map(function(item) { return item.title; }),
+      data: top5Apps.map(function(item) { return item.click_count; }),
+      icons: top5Apps.map(function(item) { return item.icon || 'globe'; }),
+      colors: top5Apps.map(function(item) { return item.color || 'blue'; }),
+      categories: top5Apps.map(function(item) { return item.category || ''; })
     };
 
+    var deviceTotal = deviceCounts['Mobile'] + deviceCounts['Desktop'];
     var deviceChartData = {
-      labels: ['Mobile (สมาร์ตโฟน/แท็บเล็ต)', 'Desktop (คอมพิวเตอร์)'],
+      labels: ['Mobile (มือถือ/แท็บเล็ต)', 'Desktop (คอมพิวเตอร์)'],
       data: [deviceCounts['Mobile'], deviceCounts['Desktop']]
     };
 
     var peakHoursChartData = {
-      labels: ['06:00-08:30 (ก่อนเข้าแถว)', '08:30-11:30 (ภาคเช้า)', '11:30-13:00 (พักเที่ยง)', '13:00-15:30 (ภาคบ่าย)', '15:30-18:00 (เลิกเรียน/ส่งงาน)', '18:00+ (ค่ำ)'],
+      labels: ['06:00-08:30 (เช้า)', '08:30-11:30 (ภาคเช้า)', '11:30-13:00 (พักเที่ยง)', '13:00-15:30 (ภาคบ่าย)', '15:30-18:00 (เลิกเรียน)', '18:00+ (ค่ำ)'],
       data: peakHourCounts
     };
 
-    var topCatName = Object.keys(categoryUsageMap).sort(function(a,b){ return categoryUsageMap[b] - categoryUsageMap[a]; })[0] || 'กลุ่มบริหารทั่วไป';
-    var mobPercent = Math.round((deviceCounts['Mobile'] / Math.max(deviceCounts['Mobile'] + deviceCounts['Desktop'], 1)) * 100);
+    var topCatName = catKeys.slice().sort(function(a, b) {
+      var diff = (categoryUsageMap[b] || 0) - (categoryUsageMap[a] || 0);
+      if (diff !== 0) return diff;
+      return (categoryAppCounts[b] || 0) - (categoryAppCounts[a] || 0);
+    })[0] || (currentCategories[0] || 'กลุ่มบริหารงานบุคคล');
+
+    var mobPercent = deviceTotal > 0 ? Math.round((deviceCounts['Mobile'] / deviceTotal) * 100) : 0;
+    var avgDailyRaw = trendTotal > 0 ? (trendTotal / Math.max(past7Days.length, 1)) : (totalUsage > 0 ? totalUsage / 7 : 0);
+    var avgDailyVal = avgDailyRaw > 0 && avgDailyRaw < 10 ? Math.round(avgDailyRaw * 10) / 10 : Math.round(avgDailyRaw);
 
     var adminPayload = {
       success: true,
@@ -964,16 +1028,22 @@ function getAdminData(forceRefresh) {
       kpis: {
         todayClicks: todayClicks,
         totalUsage: totalUsage,
+        trendTotal: trendTotal,
         totalApps: apps.length,
         onlineApps: onlineAppsCount,
         closedApps: apps.length - onlineAppsCount,
         securityApps: securityAppsCount,
         activeAppsRatio: onlineAppsCount + ' / ' + apps.length + ' ระบบ',
         pendingIssues: pendingReportsCount,
-        avgDailyUsage: Math.round(totalUsage / Math.max(past7Days.length, 1)),
+        avgDailyUsage: avgDailyVal,
+        mobileClicks: deviceCounts['Mobile'],
+        desktopClicks: deviceCounts['Desktop'],
         mobileRatio: mobPercent + '%',
         topCategoryName: topCatName,
-        uptimeRatio: '99.9%'
+        topAppName: topAppName,
+        filteredLogsCount: recentLogs.length,
+        staleLogsCount: staleLogsCount,
+        uptimeRatio: apps.length > 0 ? Math.round((onlineAppsCount / apps.length) * 1000) / 10 + '%' : '100%'
       },
       charts: {
         trend: trendChartData,
@@ -982,6 +1052,7 @@ function getAdminData(forceRefresh) {
         devices: deviceChartData,
         peakHours: peakHoursChartData
       },
+      logs: recentLogs,
       categories: currentCategories,
       settings: getSiteSettings(),
       footer: getFooterSettings(),
@@ -1948,6 +2019,118 @@ function formatDate(val) {
     return Utilities.formatDate(val, CONFIG.TIMEZONE, 'yyyy-MM-dd HH:mm');
   }
   return String(val);
+}
+
+/**
+ * Normalize a Sheet cell date value (Date object or string) into yyyy-MM-dd
+ */
+function normalizeLogDate(val) {
+  if (!val) return '';
+  if (val instanceof Date || Object.prototype.toString.call(val) === '[object Date]') {
+    return Utilities.formatDate(val, CONFIG.TIMEZONE, 'yyyy-MM-dd');
+  }
+  var s = String(val).trim();
+  var isoMatch = s.match(/^(\d{4}-\d{2}-\d{2})/);
+  if (isoMatch) return isoMatch[1];
+  var parsed = new Date(s);
+  if (!isNaN(parsed.getTime())) {
+    return Utilities.formatDate(parsed, CONFIG.TIMEZONE, 'yyyy-MM-dd');
+  }
+  return s;
+}
+
+/**
+ * Normalize a Sheet cell time value (1899 Date object or string) into HH:mm:ss
+ */
+function normalizeLogTime(val) {
+  if (!val) return '';
+  if (val instanceof Date || Object.prototype.toString.call(val) === '[object Date]') {
+    return Utilities.formatDate(val, CONFIG.TIMEZONE, 'HH:mm:ss');
+  }
+  var s = String(val).trim();
+  var hmsMatch = s.match(/(\d{1,2}:\d{2}(?::\d{2})?)/);
+  if (hmsMatch) {
+    var parts = hmsMatch[1].split(':');
+    var hh = parts[0].length === 1 ? '0' + parts[0] : parts[0];
+    var mm = parts[1] || '00';
+    var ss = parts[2] || '00';
+    return hh + ':' + mm + ':' + ss;
+  }
+  return s;
+}
+
+/**
+ * Remove stale/seed log rows from Logs sheet that do not match any active app in Apps sheet
+ */
+function pruneStaleLogs() {
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000);
+    var ss = getSpreadsheet();
+    var appsSheet = ss.getSheetByName(CONFIG.SHEETS.APPS);
+    var logsSheet = ss.getSheetByName(CONFIG.SHEETS.LOGS);
+    if (!appsSheet || !logsSheet) {
+      return { success: false, message: 'ไม่พบชีต Apps หรือ Logs' };
+    }
+
+    var appsData = appsSheet.getDataRange().getValues();
+    var activeById = {};
+    var activeByTitle = {};
+    for (var i = 1; i < appsData.length; i++) {
+      if (!appsData[i][0]) continue;
+      var id = String(appsData[i][0]).trim();
+      var title = String(appsData[i][1] || '').trim();
+      var cat = String(appsData[i][3] || '');
+      activeById[id] = { id: id, title: title, category: cat };
+      if (title) activeByTitle[title] = { id: id, title: title, category: cat };
+    }
+
+    var logsData = logsSheet.getDataRange().getValues();
+    var keptRows = [];
+    var removedCount = 0;
+    for (var l = 1; l < logsData.length; l++) {
+      var r = logsData[l];
+      if (!r[0]) continue;
+      var appId = String(r[1] || '').trim();
+      var appTitle = String(r[2] || '').trim();
+      var matched = activeById[appId] || activeByTitle[appTitle];
+      if (matched) {
+        keptRows.push([
+          String(r[0]),
+          matched.id,
+          matched.title,
+          matched.category,
+          String(r[4] || 'Desktop'),
+          normalizeLogDate(r[5]),
+          normalizeLogTime(r[6])
+        ]);
+      } else {
+        removedCount++;
+      }
+    }
+
+    var lastRow = logsSheet.getLastRow();
+    if (lastRow > 1) {
+      logsSheet.getRange(2, 1, lastRow - 1, 7).clearContent();
+    }
+    if (keptRows.length > 0) {
+      logsSheet.getRange(2, 6, keptRows.length, 2).setNumberFormat('@');
+      logsSheet.getRange(2, 1, keptRows.length, 7).setValues(keptRows);
+    }
+
+    invalidateCache();
+    return {
+      success: true,
+      removed: removedCount,
+      remaining: keptRows.length,
+      message: 'ล้างประวัติเก่าที่ไม่ใช่ระบบในปัจจุบันแล้ว ' + removedCount + ' รายการ (คงเหลือ ' + keptRows.length + ' รายการ)'
+    };
+  } catch (err) {
+    Logger.log('Error in pruneStaleLogs: ' + err);
+    return { success: false, message: err.toString() };
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 /**

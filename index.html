@@ -621,135 +621,212 @@
       <!-- TAB 2: ภาพรวม & สถิติ (ANALYTICS & CHARTS)              -->
       <!-- ======================================================== -->
       <div id="admin-tab-analytics" class="hidden space-y-6">
-        <!-- Export & Tools -->
-        <div class="flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl bg-slate-100/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
-          <div class="flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-300">
-            <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-600"></i>
-            <span>เครื่องมือทำรายงานผลการปฏิบัติงาน (PA / SAR / รายงานผู้บริหาร)</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <button onclick="downloadUsageCSV()" class="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
-              <i data-lucide="download" class="w-4 h-4"></i>
-              <span>📥 ดาวน์โหลดรายงานสถิติ (CSV)</span>
-            </button>
-            <button onclick="triggerClearServerCache()" class="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-blue-900 dark:bg-indigo-900 hover:bg-blue-800 text-white shadow-sm transition">
-              <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
-              <span>🔄 ล้างแคชและซิงค์ข้อมูลล่าสุด</span>
-            </button>
+        <!-- Executive Summary Header & Tools -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 p-5 sm:p-6 text-white shadow-lg border border-blue-900/60">
+          <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full bg-amber-400/10 blur-2xl pointer-events-none"></div>
+          <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="flex items-start space-x-3.5">
+              <div class="w-11 h-11 rounded-2xl bg-amber-400/15 border border-amber-400/30 text-amber-400 flex items-center justify-center shrink-0">
+                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+              </div>
+              <div class="space-y-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <h3 class="text-sm sm:text-base font-bold text-white">รายงานภาพรวมและสถิติการใช้งานระบบสารสนเทศ</h3>
+                  <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>ข้อมูลจริงจากระบบ</span>
+                  </span>
+                </div>
+                <p class="text-xs text-blue-200/90">ประมวลผลเฉพาะเว็บแอปพลิเคชันที่มีอยู่ในระบบปัจจุบัน พร้อมส่งออกรายงาน PA / SAR</p>
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 shrink-0">
+              <button onclick="downloadUsageCSV()" class="flex items-center space-x-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md transition active:scale-95">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>ดาวน์โหลดรายงาน (CSV)</span>
+              </button>
+              <button onclick="triggerClearServerCache()" class="flex items-center space-x-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm transition active:scale-95">
+                <i data-lucide="refresh-cw" class="w-4 h-4 text-amber-400"></i>
+                <span>ซิงค์ข้อมูลล่าสุด</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- 4 EdTech KPI Summary Cards for SAR & PA Reports -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <!-- 4 Executive KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
           <!-- KPI 1: Avg Daily Usage -->
-          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-1">
-            <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center space-x-1">
-              <i data-lucide="activity" class="w-3.5 h-3.5 text-blue-500"></i>
-              <span>การใช้งานเฉลี่ย/วัน</span>
-            </span>
-            <div class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white" id="admin-kpi-avg-daily">0 ครั้ง</div>
-            <span class="text-[10px] text-emerald-600 dark:text-emerald-400">ประเมินผลการเข้าถึงระบบ</span>
+          <div class="relative overflow-hidden bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition">
+            <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-400"></div>
+            <div class="flex items-start justify-between gap-2">
+              <div class="space-y-1 min-w-0">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block">การใช้งานเฉลี่ย / วัน</span>
+                <div class="text-2xl font-black text-slate-900 dark:text-white tracking-tight" id="admin-kpi-avg-daily">0 ครั้ง</div>
+                <span class="text-[11px] text-blue-600 dark:text-blue-400 font-medium block truncate" id="admin-kpi-avg-sub">ย้อนหลัง 7 วัน: 0 ครั้ง</span>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                <i data-lucide="activity" class="w-5 h-5"></i>
+              </div>
+            </div>
           </div>
 
           <!-- KPI 2: Mobile Usage Ratio -->
-          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-1">
-            <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center space-x-1">
-              <i data-lucide="smartphone" class="w-3.5 h-3.5 text-amber-500"></i>
-              <span>สัดส่วนผ่านมือถือ</span>
-            </span>
-            <div class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white" id="admin-kpi-mobile-ratio">0%</div>
-            <span class="text-[10px] text-amber-600 dark:text-amber-400">ครูเข้าใช้ผ่านสมาร์ตโฟน</span>
+          <div class="relative overflow-hidden bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition">
+            <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-500 to-yellow-400"></div>
+            <div class="flex items-start justify-between gap-2">
+              <div class="space-y-1 min-w-0">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block">สัดส่วนผ่านมือถือ</span>
+                <div class="text-2xl font-black text-slate-900 dark:text-white tracking-tight" id="admin-kpi-mobile-ratio">0%</div>
+                <span class="text-[11px] text-amber-600 dark:text-amber-400 font-medium block truncate" id="admin-kpi-device-sub">Mobile 0 • Desktop 0</span>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                <i data-lucide="smartphone" class="w-5 h-5"></i>
+              </div>
+            </div>
           </div>
 
-          <!-- KPI 3: Top Active Category -->
-          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-1">
-            <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center space-x-1">
-              <i data-lucide="award" class="w-3.5 h-3.5 text-purple-500"></i>
-              <span>กลุ่มงานยอดนิยมอันดับ 1</span>
-            </span>
-            <div class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate pt-1" id="admin-kpi-top-category">-</div>
-            <span class="text-[10px] text-purple-600 dark:text-purple-400">มีความถี่การใช้งานสูงสุด</span>
+          <!-- KPI 3: Top Active Category & Top App -->
+          <div class="relative overflow-hidden bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition">
+            <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-indigo-600 to-purple-500"></div>
+            <div class="flex items-start justify-between gap-2">
+              <div class="space-y-1 min-w-0">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block">กลุ่มงานยอดนิยมอันดับ 1</span>
+                <div class="text-sm sm:text-base font-bold text-slate-900 dark:text-white truncate pt-0.5" id="admin-kpi-top-category">-</div>
+                <span class="text-[11px] text-purple-600 dark:text-purple-400 font-medium block truncate" id="admin-kpi-top-app">ระบบเด่น: -</span>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+                <i data-lucide="award" class="w-5 h-5"></i>
+              </div>
+            </div>
           </div>
 
-          <!-- KPI 4: System Availability (Uptime) -->
-          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-1">
-            <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center space-x-1">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
-              <span>ดัชนีความพร้อมของระบบ</span>
-            </span>
-            <div class="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400" id="admin-kpi-uptime">99.9%</div>
-            <span class="text-[10px] text-slate-400">High-Availability GAS</span>
+          <!-- KPI 4: System Availability -->
+          <div class="relative overflow-hidden bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition">
+            <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+            <div class="flex items-start justify-between gap-2">
+              <div class="space-y-1 min-w-0">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block">ความพร้อมใช้งานระบบ</span>
+                <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight" id="admin-kpi-uptime">100%</div>
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium block truncate" id="admin-kpi-uptime-sub">ออนไลน์ 0 / 0 ระบบ</span>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Charts Grid (3 Graphs) -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- 1. Line Chart -->
-          <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
-            <div class="flex items-center justify-between">
-              <div>
-                <h4 class="text-sm font-bold text-slate-900 dark:text-white">แนวโน้มการเข้าใช้งานรายวันย้อนหลัง 7 วัน</h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400">จำนวนการคลิกใช้งานระบบทั้งหมดในแต่ละวัน</p>
+        <!-- Balanced Analytics Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <!-- 1. Line Chart: 7-Day Trend (2 cols) -->
+          <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                  <i data-lucide="trending-up" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900 dark:text-white">แนวโน้มการเข้าใช้งานรายวันย้อนหลัง 7 วัน</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400">นับเฉพาะบันทึกการใช้งานจริงของระบบที่มีอยู่ในปัจจุบัน</p>
+                </div>
               </div>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300">Daily Trend</span>
+              <span id="trend-total-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/70 dark:border-blue-800">7 วัน: 0 ครั้ง</span>
             </div>
-            <div class="h-64 sm:h-72">
+            <div class="h-64 sm:h-72 relative">
               <canvas id="chart-daily-trend"></canvas>
             </div>
           </div>
 
-          <!-- 2. Doughnut Chart -->
-          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <!-- 2. Top 5 Leaderboard Cards (1 col) -->
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col space-y-4">
             <div class="flex items-center justify-between">
-              <div>
-                <h4 class="text-sm font-bold text-slate-900 dark:text-white">สัดส่วนตามกลุ่มบริหารงาน</h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400">การเข้าใช้งานแยกตาม 4 กลุ่ม + ผู้บริหาร</p>
+              <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                  <i data-lucide="trophy" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900 dark:text-white">อันดับระบบยอดนิยม Top 5</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400">เรียงตามจำนวนครั้งที่เข้าใช้งาน</p>
+                </div>
               </div>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300">Categories</span>
             </div>
-            <div class="h-64 sm:h-72 flex items-center justify-center">
-              <canvas id="chart-category-dist"></canvas>
+            <div id="top-apps-leaderboard" class="space-y-2.5 flex-1">
+              <!-- Populated by JS -->
             </div>
           </div>
 
-          <!-- 3. Top Apps Bar Chart -->
-          <div class="lg:col-span-3 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <!-- 3. Top Apps Bar Chart (2 cols) -->
+          <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
             <div class="flex items-center justify-between">
-              <div>
-                <h4 class="text-sm font-bold text-slate-900 dark:text-white">Top 5 เว็บแอปพลิเคชันที่มีการเข้าใช้งานสูงสุด</h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400">ระบบที่มีความถี่การใช้งานสูงสุดในสถานศึกษา</p>
+              <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                  <i data-lucide="bar-chart-horizontal" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900 dark:text-white">กราฟเปรียบเทียบยอดใช้งาน Top 5 เว็บแอปพลิเคชัน</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400">สัดส่วนความถี่การเปิดใช้งานแยกตามแต่ละระบบ</p>
+                </div>
               </div>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300">Top Popular</span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300">Top Popular</span>
             </div>
-            <div class="h-60">
+            <div class="h-60 sm:h-64 relative">
               <canvas id="chart-top-apps"></canvas>
             </div>
           </div>
 
-          <!-- 4. Device Distribution Chart (Mobile vs Desktop) -->
-          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <!-- 4. Categories Doughnut Chart (1 col) -->
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between space-y-3">
             <div class="flex items-center justify-between">
-              <div>
-                <h4 class="text-sm font-bold text-slate-900 dark:text-white">สัดส่วนอุปกรณ์ผู้ใช้งาน</h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400">เปรียบเทียบมือถือ (Mobile) และคอมพิวเตอร์ (Desktop)</p>
+              <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                  <i data-lucide="layers" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900 dark:text-white">สัดส่วนตามกลุ่มบริหารงาน</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400">เฉพาะกลุ่มงานที่มีระบบเปิดใช้</p>
+                </div>
               </div>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">Device</span>
             </div>
-            <div class="h-64 sm:h-72 flex items-center justify-center">
-              <canvas id="chart-device-dist"></canvas>
+            <div class="h-52 flex items-center justify-center relative">
+              <canvas id="chart-category-dist"></canvas>
             </div>
+            <div id="category-dist-summary" class="flex flex-wrap justify-center gap-1.5 pt-1 text-[11px]"></div>
           </div>
 
-          <!-- 5. Peak Usage Hours Chart (Hourly Pattern) -->
-          <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <!-- 5. Device Distribution Chart (1 col) -->
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between space-y-3">
             <div class="flex items-center justify-between">
-              <div>
-                <h4 class="text-sm font-bold text-slate-900 dark:text-white">ช่วงเวลาที่มีการเข้าใช้งานสูงสุดในรอบวัน</h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400">วิเคราะห์พฤติกรรมการเข้าใช้งานของครูและบุคลากรตลอดวัน</p>
+              <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                  <i data-lucide="monitor-smartphone" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900 dark:text-white">สัดส่วนอุปกรณ์ผู้ใช้งาน</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400">Mobile vs Desktop</p>
+                </div>
               </div>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300">Peak Hours</span>
             </div>
-            <div class="h-64 sm:h-72">
+            <div class="h-52 flex items-center justify-center relative">
+              <canvas id="chart-device-dist"></canvas>
+            </div>
+            <div id="device-dist-summary" class="grid grid-cols-2 gap-2 pt-1 text-center text-[11px]"></div>
+          </div>
+
+          <!-- 6. Peak Usage Hours Chart (2 cols) -->
+          <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                  <i data-lucide="clock-3" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900 dark:text-white">ช่วงเวลาที่มีการเข้าใช้งานสูงสุดในรอบวัน</h4>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400">วิเคราะห์ความถี่การเข้าใช้งานตามช่วงเวลาจริงตลอดวัน</p>
+                </div>
+              </div>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">Peak Hours</span>
+            </div>
+            <div class="h-60 sm:h-64 relative">
               <canvas id="chart-peak-hours"></canvas>
             </div>
           </div>
@@ -761,18 +838,41 @@
       <!-- ======================================================== -->
       <div id="admin-tab-logs" class="hidden space-y-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
-          <div class="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
-            <div>
-              <h3 class="text-sm font-bold text-slate-900 dark:text-white">ประวัติการคลิกเข้าใช้งานสด (Recent Activity Logs)</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">บันทึกการเข้าใช้งานระบบแบบเรียลไทม์ พร้อมข้อมูลอุปกรณ์</p>
+          <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                <i data-lucide="history" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="text-sm font-bold text-slate-900 dark:text-white">ประวัติการคลิกเข้าใช้งานสด (Recent Activity Logs)</h3>
+                  <span id="logs-showing-count" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300">0 รายการ</span>
+                </div>
+                <p class="text-xs text-slate-500 dark:text-slate-400">แสดงเฉพาะบันทึกการเข้าใช้งานจริงของเว็บแอปที่มีอยู่ในระบบปัจจุบัน</p>
+              </div>
             </div>
-            <button onclick="refreshAdminData()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 transition">
-              🔄 รีเฟรช Log
-            </button>
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="logs-filter-app" onchange="renderAdminLogs()" class="px-3 py-1.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-[220px]">
+                <option value="all">ทุกระบบที่มีในเว็บ</option>
+              </select>
+              <select id="logs-filter-device" onchange="renderAdminLogs()" class="px-3 py-1.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="all">ทุกอุปกรณ์</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Desktop">Desktop</option>
+              </select>
+              <button id="btn-prune-stale-logs" onclick="pruneStaleLogsAction()" class="hidden items-center space-x-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>ล้างประวัติเก่าใน Sheet</span>
+              </button>
+              <button onclick="refreshAdminData()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>รีเฟรช Log</span>
+              </button>
+            </div>
           </div>
-          <div class="overflow-x-auto max-h-96">
+          <div class="overflow-x-auto max-h-[28rem]">
             <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 font-semibold sticky top-0 border-b border-slate-200 dark:border-slate-700">
+              <thead class="bg-slate-50 dark:bg-slate-900/60 text-slate-500 dark:text-slate-400 font-semibold sticky top-0 border-b border-slate-200 dark:border-slate-700 backdrop-blur-sm">
                 <tr>
                   <th class="px-4 py-3">วันที่ / เวลา</th>
                   <th class="px-4 py-3">เว็บแอปพลิเคชัน</th>
@@ -2074,7 +2174,7 @@
       'getAdminData', 'saveAllApps', 'saveAnnouncement', 'saveCategories',
       'updateCategoryName', 'deleteCategory', 'saveFooterSettings',
       'saveSiteSettings', 'changeAdminPin', 'changeAppLockPin',
-      'resolveIssue', 'deleteIssueReport', 'clearServerCache'
+      'resolveIssue', 'deleteIssueReport', 'pruneStaleLogs', 'clearServerCache'
     ]);
 
     function isGasEmbeddedEnv() {
@@ -2279,29 +2379,39 @@
           const onlineCount = mockApps.filter(a => a.status === 'online').length;
           const securityCount = mockApps.filter(a => a.role_access === 'executive').length;
           const totalClicks = mockApps.reduce((acc, a) => acc + (a.click_count || 0), 0);
+          const mockLogsRaw = JSON.parse(SafeStorage.getItem('mock_db_logs') || '[]');
+          const activeIds = new Set(mockApps.map(a => a.id));
+          const activeLogs = mockLogsRaw.filter(l => activeIds.has(l.app_id));
 
           return {
             success: true,
             spreadsheetUrl: '',
             kpis: {
-              todayClicks: 42,
+              todayClicks: activeLogs.filter(l => l.date === new Date().toISOString().slice(0, 10)).length,
               totalUsage: totalClicks,
+              trendTotal: activeLogs.length,
               totalApps: mockApps.length,
               onlineApps: onlineCount,
               closedApps: mockApps.length - onlineCount,
               securityApps: securityCount,
-              avgDailyUsage: Math.round(totalClicks / 7) || 38,
-              mobileRatio: '65%',
-              topCategoryName: 'กลุ่มบริหารงานงบประมาณ',
-              uptimeRatio: '99.9%'
+              avgDailyUsage: Math.round((totalClicks / 7) * 10) / 10,
+              mobileClicks: activeLogs.filter(l => l.device === 'Mobile').length,
+              desktopClicks: activeLogs.filter(l => l.device !== 'Mobile').length,
+              mobileRatio: activeLogs.length > 0 ? Math.round((activeLogs.filter(l => l.device === 'Mobile').length / activeLogs.length) * 100) + '%' : '0%',
+              topCategoryName: (mockApps[0] && mockApps[0].category) || 'กลุ่มบริหารงานบุคคล',
+              topAppName: (mockApps[0] && mockApps[0].title) || '-',
+              filteredLogsCount: activeLogs.length,
+              staleLogsCount: mockLogsRaw.length - activeLogs.length,
+              uptimeRatio: mockApps.length > 0 ? Math.round((onlineCount / mockApps.length) * 1000) / 10 + '%' : '100%'
             },
             charts: {
-              trend: { labels: ['18/10', '19/10', '20/10', '21/10', '22/10', '23/10', '24/10'], data: [35, 48, 52, 68, 74, 61, 82] },
-              categories: { labels: mockCats, data: mockCats.map(() => 50) },
-              topApps: { labels: mockApps.slice(0, 5).map(a => a.title), data: mockApps.slice(0, 5).map(a => a.click_count || 50) },
-              devices: { labels: ['Mobile (สมาร์ตโฟน/แท็บเล็ต)', 'Desktop (คอมพิวเตอร์)'], data: [Math.round(totalClicks * 0.65) || 142, Math.round(totalClicks * 0.35) || 78] },
-              peakHours: { labels: ['06:00-08:30 (เช้า)', '08:30-11:30 (ภาคเช้า)', '11:30-13:00 (พักเที่ยง)', '13:00-15:30 (ภาคบ่าย)', '15:30-18:00 (เลิกเรียน)', '18:00+ (ค่ำ)'], data: [45, 68, 38, 32, 26, 11] }
+              trend: { labels: ['6 วันก่อน', '5 วันก่อน', '4 วันก่อน', '3 วันก่อน', '2 วันก่อน', 'เมื่อวาน', 'วันนี้'], data: [0, 0, 0, 0, 0, 0, activeLogs.length] },
+              categories: { labels: [...new Set(mockApps.map(a => a.category))], data: [...new Set(mockApps.map(a => a.category))].map(cat => mockApps.filter(a => a.category === cat).reduce((s, a) => s + (a.click_count || 0), 0)) },
+              topApps: { labels: mockApps.slice(0, 5).map(a => a.title), data: mockApps.slice(0, 5).map(a => a.click_count || 0), icons: mockApps.slice(0, 5).map(a => a.icon || 'globe'), colors: mockApps.slice(0, 5).map(a => a.color || 'blue') },
+              devices: { labels: ['Mobile (มือถือ/แท็บเล็ต)', 'Desktop (คอมพิวเตอร์)'], data: [activeLogs.filter(l => l.device === 'Mobile').length, activeLogs.filter(l => l.device !== 'Mobile').length] },
+              peakHours: { labels: ['06:00-08:30 (เช้า)', '08:30-11:30 (ภาคเช้า)', '11:30-13:00 (พักเที่ยง)', '13:00-15:30 (ภาคบ่าย)', '15:30-18:00 (เลิกเรียน)', '18:00+ (ค่ำ)'], data: [0, activeLogs.length, 0, 0, 0, 0] }
             },
+            logs: activeLogs.slice(0, 100),
             categories: mockCats,
             footer: mockFooter,
             settings: mockSettings,
@@ -2331,7 +2441,29 @@
           const a = mockApps.find(x => x.id === payload.appId);
           if (a) a.click_count = (a.click_count || 0) + 1;
           SafeStorage.setItem('mock_db_apps', JSON.stringify(mockApps));
+          const mockLogsRaw = JSON.parse(SafeStorage.getItem('mock_db_logs') || '[]');
+          const nowD = new Date();
+          mockLogsRaw.unshift({
+            log_id: 'MOCK-' + nowD.getTime(),
+            app_id: payload.appId,
+            title: payload.appTitle || (a && a.title) || '',
+            category: payload.category || (a && a.category) || '',
+            icon: (a && a.icon) || 'globe',
+            color: (a && a.color) || 'blue',
+            device: payload.device || 'Desktop',
+            date: nowD.toISOString().slice(0, 10),
+            time: nowD.toTimeString().slice(0, 8)
+          });
+          SafeStorage.setItem('mock_db_logs', JSON.stringify(mockLogsRaw.slice(0, 100)));
           return { success: true };
+        }
+
+        case 'pruneStaleLogs': {
+          const mockLogsRaw = JSON.parse(SafeStorage.getItem('mock_db_logs') || '[]');
+          const activeIds = new Set(mockApps.map(a => a.id));
+          const filtered = mockLogsRaw.filter(l => activeIds.has(l.app_id));
+          SafeStorage.setItem('mock_db_logs', JSON.stringify(filtered));
+          return { success: true, removed: mockLogsRaw.length - filtered.length, remaining: filtered.length };
         }
 
         default:
@@ -2897,11 +3029,17 @@
       renderQuickStats();
 
       const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+      sessionStorage.removeItem(APP_RUNTIME_CONFIG.ADMIN_DATA_CACHE_KEY);
+      APP_STATE.adminDataStale = true;
       callBackend('recordClick', {
         appId: app.id,
         appTitle: app.title,
         category: app.category,
         device: isMobile ? 'Mobile' : 'Desktop'
+      }).then(() => {
+        if (APP_STATE.adminAuthenticated) {
+          loadAdminData({ silent: true, forceRefresh: true });
+        }
       }).catch(console.warn);
     }
 
@@ -3126,7 +3264,20 @@
         }
       });
 
-      if (tabName === 'analytics') renderAdminCharts();
+      if (tabName === 'analytics') {
+        requestAnimationFrame(() => renderAdminCharts());
+        if (APP_STATE.adminDataStale) {
+          APP_STATE.adminDataStale = false;
+          loadAdminData({ silent: true, forceRefresh: true });
+        }
+      }
+      if (tabName === 'logs') {
+        renderAdminLogs();
+        if (APP_STATE.adminDataStale) {
+          APP_STATE.adminDataStale = false;
+          loadAdminData({ silent: true, forceRefresh: true });
+        }
+      }
       if (tabName === 'issues') renderAdminIssuesTab();
       if (tabName === 'settings') {
         renderThemeGrid(APP_STATE.settings?.theme || 'navy-gold');
@@ -3193,8 +3344,22 @@
       // 2. Render Editable Table with Sortable Drag & Drop
       renderAdminEditableTable(data.apps);
 
-      // 3. Render Logs
-      renderAdminLogs(data.charts ? data.apps : []);
+      // 3. Render Logs (ONLY active apps in current system)
+      populateLogsAppFilter(data.apps || []);
+      const pruneBtn = document.getElementById('btn-prune-stale-logs');
+      if (pruneBtn) {
+        const staleCnt = Number(data.kpis && data.kpis.staleLogsCount ? data.kpis.staleLogsCount : 0);
+        if (staleCnt > 0) {
+          pruneBtn.classList.remove('hidden');
+          pruneBtn.classList.add('inline-flex');
+          const span = pruneBtn.querySelector('span');
+          if (span) span.textContent = `ล้างประวัติเก่าใน Sheet (${staleCnt})`;
+        } else {
+          pruneBtn.classList.add('hidden');
+          pruneBtn.classList.remove('inline-flex');
+        }
+      }
+      renderAdminLogs(Array.isArray(data.logs) ? data.logs : []);
 
       // 4. Render Broadcast form
       if (data.announcement) {
@@ -3225,19 +3390,35 @@
       // 7. Render 4 EdTech SAR / PA KPIs in Tab 2
       if (data.kpis) {
         const kAvg = document.getElementById('admin-kpi-avg-daily');
+        const kAvgSub = document.getElementById('admin-kpi-avg-sub');
         const kMob = document.getElementById('admin-kpi-mobile-ratio');
+        const kDevSub = document.getElementById('admin-kpi-device-sub');
         const kTop = document.getElementById('admin-kpi-top-category');
+        const kTopApp = document.getElementById('admin-kpi-top-app');
         const kUpt = document.getElementById('admin-kpi-uptime');
-        if (kAvg) kAvg.textContent = (data.kpis.avgDailyUsage || Math.round(data.kpis.totalUsage / 7)) + ' ครั้ง';
-        if (kMob) kMob.textContent = data.kpis.mobileRatio || '65%';
-        if (kTop) kTop.textContent = data.kpis.topCategoryName || 'กลุ่มบริหารทั่วไป';
-        if (kUpt) kUpt.textContent = data.kpis.uptimeRatio || '99.9%';
+        const kUptSub = document.getElementById('admin-kpi-uptime-sub');
+
+        const avgVal = data.kpis.avgDailyUsage !== undefined ? data.kpis.avgDailyUsage : 0;
+        const trendTotalVal = data.kpis.trendTotal !== undefined ? data.kpis.trendTotal : (data.kpis.totalUsage || 0);
+        const mobCnt = data.kpis.mobileClicks !== undefined ? data.kpis.mobileClicks : 0;
+        const deskCnt = data.kpis.desktopClicks !== undefined ? data.kpis.desktopClicks : 0;
+
+        if (kAvg) kAvg.textContent = avgVal + ' ครั้ง';
+        if (kAvgSub) kAvgSub.textContent = `ย้อนหลัง 7 วัน: ${trendTotalVal.toLocaleString()} ครั้ง`;
+        if (kMob) kMob.textContent = data.kpis.mobileRatio !== undefined ? data.kpis.mobileRatio : '0%';
+        if (kDevSub) kDevSub.textContent = `Mobile ${mobCnt.toLocaleString()} • Desktop ${deskCnt.toLocaleString()}`;
+        if (kTop) kTop.textContent = data.kpis.topCategoryName || '-';
+        if (kTopApp) kTopApp.textContent = `ระบบเด่น: ${data.kpis.topAppName || '-'}`;
+        if (kUpt) kUpt.textContent = data.kpis.uptimeRatio || '100%';
+        if (kUptSub) kUptSub.textContent = `ออนไลน์ ${data.kpis.onlineApps || 0} / ${data.kpis.totalApps || 0} ระบบ`;
       }
 
       // 8. Render Active Categories List in Settings Tab
       renderSettingsCategoriesList();
 
-      
+      if (APP_STATE.adminTab === 'analytics') {
+        requestAnimationFrame(() => renderAdminCharts());
+      }
 
       safeCreateIcons();
     }
@@ -4068,45 +4249,114 @@
       });
     }
 
-    // 10. CHARTS & LOGS RENDERING (5 ADVANCED EDTECH CHARTS)
+    // 10. CHARTS & LOGS RENDERING (EXECUTIVE EDTECH ANALYTICS & REAL LOGS)
+    function renderTopAppsLeaderboard(appsList) {
+      const container = document.getElementById('top-apps-leaderboard');
+      if (!container) return;
+      const apps = Array.isArray(appsList) ? appsList : [];
+      if (apps.length === 0) {
+        container.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-center py-10 text-slate-400 text-xs">ยังไม่มีข้อมูลเว็บแอปพลิเคชันในระบบ</div>`;
+        return;
+      }
+
+      const top5 = apps.slice().sort((a, b) => (Number(b.click_count) || 0) - (Number(a.click_count) || 0)).slice(0, 5);
+      const maxClicks = Math.max(...top5.map(a => Number(a.click_count) || 0), 1);
+
+      container.innerHTML = top5.map((app, idx) => {
+        const clicks = Number(app.click_count) || 0;
+        const pct = clicks > 0 ? Math.max(Math.round((clicks / maxClicks) * 100), 10) : 0;
+        const rankStyle = idx === 0
+          ? 'bg-amber-400 text-slate-950 shadow-sm'
+          : idx === 1
+            ? 'bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-white'
+            : idx === 2
+              ? 'bg-orange-200 dark:bg-orange-900/60 text-orange-800 dark:text-orange-200'
+              : 'bg-slate-100 dark:bg-slate-700/70 text-slate-500 dark:text-slate-300';
+        const colorObj = COLOR_CLASSES[app.color] || COLOR_CLASSES.blue;
+        return `
+          <div class="p-2.5 rounded-xl bg-slate-50/90 dark:bg-slate-900/50 border border-slate-200/70 dark:border-slate-700/70 hover:border-blue-300 dark:hover:border-blue-700 transition">
+            <div class="flex items-center justify-between gap-2 mb-1.5">
+              <div class="flex items-center space-x-2 min-w-0">
+                <span class="w-5 h-5 rounded-md text-[10px] font-black flex items-center justify-center shrink-0 ${rankStyle}">${idx + 1}</span>
+                <div class="w-6 h-6 rounded-lg ${colorObj.bgLight} ${colorObj.text} flex items-center justify-center shrink-0">
+                  ${renderIconOrImage(app.icon, 'w-3.5 h-3.5')}
+                </div>
+                <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate" title="${escapeHTML(app.title)}">${escapeHTML(app.title)}</span>
+              </div>
+              <span class="text-xs font-bold text-blue-700 dark:text-amber-400 shrink-0 tabular-nums">${clicks.toLocaleString()}</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-blue-600 to-amber-400 transition-all duration-500" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     function renderAdminCharts() {
       if (!APP_STATE.adminData || !APP_STATE.adminData.charts) return;
       const isDark = document.documentElement.classList.contains('dark');
       const textColor = isDark ? '#94a3b8' : '#475569';
-      const gridColor = isDark ? '#1e293b' : '#f1f5f9';
+      const gridColor = isDark ? 'rgba(51, 65, 85, 0.5)' : 'rgba(226, 232, 240, 0.7)';
+      const tooltipBg = isDark ? '#0f172a' : '#1e293b';
       const c = APP_STATE.adminData.charts;
+
+      // 0. Ranked Top 5 Leaderboard Cards
+      renderTopAppsLeaderboard(APP_STATE.adminData.apps || []);
 
       // 1. Line Chart: Daily Trend
       const trendCtx = document.getElementById('chart-daily-trend');
+      const trendBadge = document.getElementById('trend-total-badge');
+      if (trendBadge && c.trend) {
+        const trendSum = c.trend.total !== undefined ? c.trend.total : (c.trend.data || []).reduce((s, v) => s + (Number(v) || 0), 0);
+        trendBadge.textContent = `7 วันล่าสุด: ${Number(trendSum).toLocaleString()} ครั้ง`;
+      }
       if (trendCtx && c.trend) {
         if (APP_STATE.charts.dailyTrend) APP_STATE.charts.dailyTrend.destroy();
         const ctx = trendCtx.getContext('2d');
-        const grad = ctx.createLinearGradient(0, 0, 0, 300);
-        grad.addColorStop(0, 'rgba(59, 130, 246, 0.45)');
-        grad.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+        const grad = ctx.createLinearGradient(0, 0, 0, 280);
+        grad.addColorStop(0, 'rgba(37, 99, 235, 0.35)');
+        grad.addColorStop(1, 'rgba(37, 99, 235, 0.02)');
 
         APP_STATE.charts.dailyTrend = new Chart(trendCtx, {
           type: 'line',
           data: {
             labels: c.trend.labels,
             datasets: [{
+              label: 'จำนวนการใช้งาน',
               data: c.trend.data,
               borderColor: '#2563eb',
+              borderWidth: 2.5,
               backgroundColor: grad,
               fill: true,
-              tension: 0.35,
-              pointBackgroundColor: '#2563eb',
-              pointBorderColor: '#ffffff',
-              pointRadius: 5
+              tension: 0.38,
+              pointBackgroundColor: '#ffffff',
+              pointBorderColor: '#2563eb',
+              pointBorderWidth: 2.5,
+              pointRadius: 4.5,
+              pointHoverRadius: 7,
+              pointHoverBackgroundColor: '#f59e0b',
+              pointHoverBorderColor: '#ffffff'
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: tooltipBg,
+                titleFont: { family: 'Prompt', size: 12 },
+                bodyFont: { family: 'Prompt', size: 12 },
+                padding: 10,
+                cornerRadius: 10,
+                callbacks: { label: (ctx) => ` ${ctx.parsed.y} ครั้ง` }
+              }
+            },
             scales: {
-              x: { grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'Prompt' } } },
-              y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'Prompt' }, precision: 0 } }
+              x: { grid: { display: false }, ticks: { color: textColor, font: { family: 'Prompt', size: 11 } } },
+              y: { beginAtZero: true, suggestedMax: 5, grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'Prompt', size: 11 }, precision: 0 } }
             }
           }
         });
@@ -4114,45 +4364,105 @@
 
       // 2. Doughnut Chart: Categories Distribution
       const catCtx = document.getElementById('chart-category-dist');
+      const catPalette = ['#2563eb', '#f59e0b', '#10b981', '#8b5cf6', '#f43f5e', '#06b6d4'];
       if (catCtx && c.categories) {
         if (APP_STATE.charts.categories) APP_STATE.charts.categories.destroy();
+        const catLabels = c.categories.labels || [];
+        const catValues = c.categories.data || [];
+        const hasAnyCatClicks = catValues.some(v => Number(v) > 0);
+        const displayCatValues = hasAnyCatClicks ? catValues : catLabels.map(() => 1);
+
         APP_STATE.charts.categories = new Chart(catCtx, {
           type: 'doughnut',
           data: {
-            labels: c.categories.labels,
+            labels: catLabels,
             datasets: [{
-              data: c.categories.data,
-              backgroundColor: ['#10b981', '#f59e0b', '#3b82f6', '#8b5cf6', '#f43f5e', '#06b6d4'],
-              borderWidth: 2,
-              borderColor: isDark ? '#1e293b' : '#ffffff'
+              data: displayCatValues,
+              backgroundColor: catPalette,
+              borderWidth: 3,
+              borderColor: isDark ? '#1e293b' : '#ffffff',
+              hoverOffset: 6
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { color: textColor, font: { family: 'Prompt', size: 11 } } } }
+            cutout: '66%',
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: tooltipBg,
+                bodyFont: { family: 'Prompt', size: 12 },
+                padding: 10,
+                cornerRadius: 10,
+                callbacks: {
+                  label: (ctx) => {
+                    const realVal = catValues[ctx.dataIndex] || 0;
+                    return ` ${ctx.label}: ${realVal.toLocaleString()} ครั้ง`;
+                  }
+                }
+              }
+            }
           }
         });
+
+        const catSummary = document.getElementById('category-dist-summary');
+        if (catSummary) {
+          catSummary.innerHTML = catLabels.map((lbl, idx) => `
+            <span class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-900/70 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700">
+              <span class="w-2 h-2 rounded-full shrink-0" style="background:${catPalette[idx % catPalette.length]}"></span>
+              <span class="truncate max-w-[140px]">${escapeHTML(lbl)}</span>
+              <strong class="text-slate-900 dark:text-white">${Number(catValues[idx] || 0).toLocaleString()}</strong>
+            </span>
+          `).join('');
+        }
       }
 
       // 3. Horizontal Bar Chart: Top Apps
       const topCtx = document.getElementById('chart-top-apps');
       if (topCtx && c.topApps) {
         if (APP_STATE.charts.topApps) APP_STATE.charts.topApps.destroy();
+        const fullLabels = c.topApps.labels || [];
+        const shortLabels = fullLabels.map(t => t && t.length > 26 ? t.substring(0, 24) + '...' : (t || ''));
+        const topData = c.topApps.data || [];
+        const tCtx2d = topCtx.getContext('2d');
+        const barGrad = tCtx2d.createLinearGradient(0, 0, 500, 0);
+        barGrad.addColorStop(0, '#1e3a8a');
+        barGrad.addColorStop(1, '#f59e0b');
+
         APP_STATE.charts.topApps = new Chart(topCtx, {
           type: 'bar',
           data: {
-            labels: c.topApps.labels,
-            datasets: [{ data: c.topApps.data, backgroundColor: '#f59e0b', borderRadius: 8 }]
+            labels: shortLabels,
+            datasets: [{
+              label: 'ยอดเข้าใช้งาน',
+              data: topData,
+              backgroundColor: barGrad,
+              borderRadius: 8,
+              barThickness: 22
+            }]
           },
           options: {
             indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: tooltipBg,
+                titleFont: { family: 'Prompt', size: 12 },
+                bodyFont: { family: 'Prompt', size: 12 },
+                padding: 10,
+                cornerRadius: 10,
+                callbacks: {
+                  title: (items) => items.length ? (fullLabels[items[0].dataIndex] || items[0].label) : '',
+                  label: (ctx) => ` ${ctx.parsed.x} ครั้ง`
+                }
+              }
+            },
             scales: {
-              x: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'Prompt' }, precision: 0 } },
-              y: { grid: { display: false }, ticks: { color: textColor, font: { family: 'Prompt' } } }
+              x: { beginAtZero: true, suggestedMax: 5, grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'Prompt', size: 11 }, precision: 0 } },
+              y: { grid: { display: false }, ticks: { color: textColor, font: { family: 'Prompt', size: 11 } } }
             }
           }
         });
@@ -4162,82 +4472,242 @@
       const devCtx = document.getElementById('chart-device-dist');
       if (devCtx) {
         if (APP_STATE.charts.devices) APP_STATE.charts.devices.destroy();
-        const devData = (c.devices && c.devices.data) ? c.devices : { labels: ['Mobile (สมาร์ตโฟน)', 'Desktop (คอมพิวเตอร์)'], data: [142, 78] };
+        const devData = (c.devices && Array.isArray(c.devices.data)) ? c.devices : { labels: ['Mobile (มือถือ/แท็บเล็ต)', 'Desktop (คอมพิวเตอร์)'], data: [0, 0] };
+        const mCnt = Number(devData.data[0] || 0);
+        const dCnt = Number(devData.data[1] || 0);
+        const hasDeviceClicks = (mCnt + dCnt) > 0;
+
         APP_STATE.charts.devices = new Chart(devCtx, {
           type: 'doughnut',
           data: {
             labels: devData.labels,
             datasets: [{
-              data: devData.data,
-              backgroundColor: ['#f59e0b', '#3b82f6'],
-              borderWidth: 2,
-              borderColor: isDark ? '#1e293b' : '#ffffff'
+              data: hasDeviceClicks ? [mCnt, dCnt] : [1, 1],
+              backgroundColor: hasDeviceClicks ? ['#f59e0b', '#2563eb'] : [isDark ? '#334155' : '#e2e8f0', isDark ? '#1e293b' : '#cbd5e1'],
+              borderWidth: 3,
+              borderColor: isDark ? '#1e293b' : '#ffffff',
+              hoverOffset: 6
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { color: textColor, font: { family: 'Prompt', size: 11 } } } }
+            cutout: '66%',
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: tooltipBg,
+                bodyFont: { family: 'Prompt', size: 12 },
+                padding: 10,
+                cornerRadius: 10,
+                callbacks: {
+                  label: (ctx) => {
+                    const realVal = ctx.dataIndex === 0 ? mCnt : dCnt;
+                    return ` ${ctx.label}: ${realVal.toLocaleString()} ครั้ง`;
+                  }
+                }
+              }
+            }
           }
         });
+
+        const devSummary = document.getElementById('device-dist-summary');
+        if (devSummary) {
+          const totalDev = Math.max(mCnt + dCnt, 1);
+          const mPct = hasDeviceClicks ? Math.round((mCnt / totalDev) * 100) : 0;
+          const dPct = hasDeviceClicks ? (100 - mPct) : 0;
+          devSummary.innerHTML = `
+            <div class="p-2 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-800/60">
+              <div class="font-bold text-amber-700 dark:text-amber-300">Mobile ${mPct}%</div>
+              <div class="text-[10px] text-slate-500 dark:text-slate-400">${mCnt.toLocaleString()} ครั้ง</div>
+            </div>
+            <div class="p-2 rounded-xl bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200/70 dark:border-blue-800/60">
+              <div class="font-bold text-blue-700 dark:text-blue-300">Desktop ${dPct}%</div>
+              <div class="text-[10px] text-slate-500 dark:text-slate-400">${dCnt.toLocaleString()} ครั้ง</div>
+            </div>
+          `;
+        }
       }
 
       // 5. Vertical Bar Chart: Peak Usage Hours
       const peakCtx = document.getElementById('chart-peak-hours');
       if (peakCtx) {
         if (APP_STATE.charts.peakHours) APP_STATE.charts.peakHours.destroy();
-        const peakData = (c.peakHours && c.peakHours.data) ? c.peakHours : {
+        const peakData = (c.peakHours && Array.isArray(c.peakHours.data)) ? c.peakHours : {
           labels: ['06:00-08:30 (เช้า)', '08:30-11:30 (ภาคเช้า)', '11:30-13:00 (พักเที่ยง)', '13:00-15:30 (ภาคบ่าย)', '15:30-18:00 (เลิกเรียน)', '18:00+ (ค่ำ)'],
-          data: [45, 68, 38, 32, 26, 11]
+          data: [0, 0, 0, 0, 0, 0]
         };
+        const pCtx2d = peakCtx.getContext('2d');
+        const peakGrad = pCtx2d.createLinearGradient(0, 0, 0, 260);
+        peakGrad.addColorStop(0, '#10b981');
+        peakGrad.addColorStop(1, '#0d9488');
+
         APP_STATE.charts.peakHours = new Chart(peakCtx, {
           type: 'bar',
           data: {
             labels: peakData.labels,
             datasets: [{
+              label: 'จำนวนการใช้งาน',
               data: peakData.data,
-              backgroundColor: '#10b981',
-              borderRadius: 8
+              backgroundColor: peakGrad,
+              borderRadius: 8,
+              maxBarThickness: 44
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: tooltipBg,
+                titleFont: { family: 'Prompt', size: 12 },
+                bodyFont: { family: 'Prompt', size: 12 },
+                padding: 10,
+                cornerRadius: 10,
+                callbacks: { label: (ctx) => ` ${ctx.parsed.y} ครั้ง` }
+              }
+            },
             scales: {
               x: { grid: { display: false }, ticks: { color: textColor, font: { family: 'Prompt', size: 10 } } },
-              y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'Prompt' }, precision: 0 } }
+              y: { beginAtZero: true, suggestedMax: 5, grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'Prompt', size: 11 }, precision: 0 } }
             }
           }
         });
       }
+
+      safeCreateIcons();
     }
 
-    function renderAdminLogs(apps) {
+    function populateLogsAppFilter(appsList) {
+      const select = document.getElementById('logs-filter-app');
+      if (!select) return;
+      const currentVal = select.value || 'all';
+      const apps = Array.isArray(appsList) ? appsList : [];
+      select.innerHTML = `<option value="all">ทุกระบบที่มีในเว็บ (${apps.length})</option>` +
+        apps.map(a => `<option value="${escapeHTML(a.id)}">${escapeHTML(a.title)}</option>`).join('');
+      if ([...select.options].some(o => o.value === currentVal)) {
+        select.value = currentVal;
+      }
+    }
+
+    function renderAdminLogs(logsInput) {
       const tbody = document.getElementById('admin-logs-tbody');
       if (!tbody) return;
 
-      const sampleLogs = [
-        { time: '14:45:12', date: '2026-10-24', title: 'จองห้องประชุม', cat: 'กลุ่มบริหารทั่วไป', dev: 'Desktop' },
-        { time: '14:32:05', date: '2026-10-24', title: 'แจ้งซ่อมแซม', cat: 'กลุ่มบริหารทั่วไป', dev: 'Mobile' },
-        { time: '13:10:44', date: '2026-10-24', title: 'ยืม-คืนพัสดุ', cat: 'กลุ่มบริหารงานงบประมาณ', dev: 'Desktop' },
-        { time: '11:25:30', date: '2026-10-24', title: 'ระบบรับ-ส่งหนังสือราชการ', cat: 'กลุ่มบริหารทั่วไป', dev: 'Desktop' },
-        { time: '10:05:18', date: '2026-10-24', title: 'ระบบรักษาความปลอดภัย', cat: 'กลุ่มบริหารทั่วไป', dev: 'Mobile' }
-      ];
+      const activeApps = (APP_STATE.adminData && APP_STATE.adminData.apps) || APP_STATE.apps || [];
+      const activeById = new Map(activeApps.map(a => [String(a.id), a]));
+      const activeByTitle = new Map(activeApps.map(a => [String(a.title || '').trim(), a]));
 
-      document.getElementById('admin-tab-logs-count').textContent = sampleLogs.length;
+      const rawLogs = Array.isArray(logsInput)
+        ? logsInput
+        : (APP_STATE.adminData && Array.isArray(APP_STATE.adminData.logs) ? APP_STATE.adminData.logs : []);
 
-      tbody.innerHTML = sampleLogs.map(l => `
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/40">
-          <td class="px-4 py-2.5 font-mono text-slate-500">${l.date} ${l.time}</td>
-          <td class="px-4 py-2.5 font-bold text-slate-900 dark:text-white">${l.title}</td>
-          <td class="px-4 py-2.5 text-slate-600 dark:text-slate-300">${l.cat}</td>
-          <td class="px-4 py-2.5 text-center">
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${l.dev === 'Mobile' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}">${l.dev}</span>
-          </td>
-        </tr>
-      `).join('');
+      // Strictly keep ONLY logs belonging to apps currently existing in the system
+      const activeOnlyLogs = rawLogs.filter(l => {
+        if (!l) return false;
+        const appId = String(l.app_id || '').trim();
+        const title = String(l.title || '').trim();
+        return activeById.has(appId) || activeByTitle.has(title);
+      }).map(l => {
+        const matched = activeById.get(String(l.app_id || '').trim()) || activeByTitle.get(String(l.title || '').trim());
+        return {
+          ...l,
+          app_id: matched.id,
+          title: matched.title,
+          category: matched.category || l.category || '',
+          icon: matched.icon || l.icon || 'globe',
+          color: matched.color || l.color || 'blue'
+        };
+      });
+
+      const tabBadge = document.getElementById('admin-tab-logs-count');
+      if (tabBadge) tabBadge.textContent = activeOnlyLogs.length;
+
+      const appFilter = document.getElementById('logs-filter-app')?.value || 'all';
+      const devFilter = document.getElementById('logs-filter-device')?.value || 'all';
+
+      const filtered = activeOnlyLogs.filter(l => {
+        if (appFilter !== 'all' && String(l.app_id) !== String(appFilter)) return false;
+        if (devFilter !== 'all' && String(l.device) !== String(devFilter)) return false;
+        return true;
+      });
+
+      const showingBadge = document.getElementById('logs-showing-count');
+      if (showingBadge) showingBadge.textContent = `${filtered.length} รายการ`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="px-4 py-12 text-center text-slate-400">
+              <div class="flex flex-col items-center justify-center space-y-2">
+                <i data-lucide="inbox" class="w-8 h-8 text-slate-300 dark:text-slate-600"></i>
+                <span class="text-xs font-medium">ยังไม่มีประวัติการคลิกใช้งานของระบบที่มีอยู่ในปัจจุบัน</span>
+              </div>
+            </td>
+          </tr>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(l => {
+        const colorObj = COLOR_CLASSES[l.color] || COLOR_CLASSES.blue;
+        const isMob = String(l.device || '').toLowerCase().includes('mobile');
+        return `
+          <tr class="hover:bg-slate-50/90 dark:hover:bg-slate-700/40 transition">
+            <td class="px-4 py-3 font-mono text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-900/70">${escapeHTML(l.date || '-')} ${escapeHTML(l.time || '')}</span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-7 h-7 rounded-lg ${colorObj.bgLight} ${colorObj.text} flex items-center justify-center shrink-0">
+                  ${renderIconOrImage(l.icon, 'w-3.5 h-3.5')}
+                </div>
+                <span class="font-bold text-slate-900 dark:text-white">${escapeHTML(l.title)}</span>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-slate-600 dark:text-slate-300">
+              <span class="px-2 py-0.5 rounded-md text-[11px] bg-slate-100 dark:bg-slate-700/70">${escapeHTML(l.category)}</span>
+            </td>
+            <td class="px-4 py-3 text-center">
+              <span class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-[10px] font-semibold ${isMob ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300' : 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300'}">
+                <i data-lucide="${isMob ? 'smartphone' : 'monitor'}" class="w-3 h-3"></i>
+                <span>${isMob ? 'Mobile' : 'Desktop'}</span>
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join('');
       safeCreateIcons();
+    }
+
+    async function pruneStaleLogsAction() {
+      const confirmRes = await Swal.fire({
+        title: 'ล้างประวัติเก่าที่ไม่ใช่ระบบปัจจุบัน?',
+        text: 'ระบบจะลบแถว Log ของเว็บแอปที่ถูกลบออกไปแล้วออกจากชีต Logs เพื่อความสะอาดของฐานข้อมูล (ประวัติของเว็บทั้ง 10 ระบบจะยังคงอยู่ครบ)',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        confirmButtonText: 'ล้างประวัติเก่า',
+        cancelButtonText: 'ยกเลิก'
+      });
+      if (!confirmRes.isConfirmed) return;
+
+      Swal.fire({ title: 'กำลังล้างประวัติเก่า...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      try {
+        const res = await callBackend('pruneStaleLogs', {});
+        Swal.fire({
+          icon: 'success',
+          title: 'ทำความสะอาดสำเร็จ',
+          text: (res && res.message) || 'ล้างประวัติเก่าเรียบร้อยแล้ว',
+          timer: 1800,
+          showConfirmButton: false
+        });
+        loadAdminData({ forceRefresh: true });
+      } catch (err) {
+        Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: err.toString() });
+      }
     }
 
     // ============================================================
