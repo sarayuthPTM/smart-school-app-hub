@@ -109,10 +109,14 @@
     }
     /* Card Hover Lift */
     .app-card {
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
     }
     .app-card:hover {
       transform: translateY(-4px);
+    }
+    .hero-mesh-pattern {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      background-size: 22px 22px;
     }
     /* Sortable Drag Ghost Styles */
     .sortable-ghost {
@@ -136,17 +140,17 @@
 
 
   <!-- ============================================================ -->
-  <!-- TOP NAVIGATION BAR                                           -->
+  <!-- TOP NAVIGATION BAR (FROSTED GLASS)                           -->
   <!-- ============================================================ -->
-  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors shadow-sm">
+  <header class="sticky top-0 z-40 bg-white/80 dark:bg-[#0b1120]/85 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800/80 transition-colors shadow-[0_4px_20px_-6px_rgba(15,23,42,0.08)]">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-14 sm:h-20">
         
         <!-- Logo & Organization Title -->
-        <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer min-w-0" onclick="switchView('portal')">
-          <div id="school-logo-container" class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center overflow-hidden shrink-0">
+        <div class="flex items-center space-x-2.5 sm:space-x-3.5 cursor-pointer min-w-0 group" onclick="switchView('portal')">
+          <div id="school-logo-container" class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center overflow-hidden shrink-0 ring-2 ring-amber-400/20 group-hover:ring-amber-400/50 transition shadow-sm">
             <span id="school-default-logo-icon" class="w-full h-full flex items-center justify-center">
-              <img src="/logo.png?v=6" alt="Smart School App Hub" class="w-full h-full object-contain" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+              <img src="/logo.png?v=6" alt="Smart School App Hub" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
               <svg viewBox="0 0 64 64" class="hidden w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="2" y="2" width="60" height="60" rx="15" fill="#172554"/>
                 <rect x="11" y="11" width="19" height="19" rx="5" fill="#ffffff"/>
@@ -161,25 +165,25 @@
           </div>
           <div class="min-w-0">
             <div class="flex items-center space-x-1.5 sm:space-x-2">
-              <span id="school-brand-name" class="font-bold text-sm sm:text-xl text-slate-900 dark:text-white tracking-tight truncate">SMART SCHOOL</span>
-              <span class="text-[9px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.2 sm:py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 shrink-0">APP HUB</span>
+              <span id="school-brand-name" class="font-extrabold text-sm sm:text-xl text-slate-900 dark:text-white tracking-tight truncate">SMART SCHOOL</span>
+              <span class="text-[9px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40 shrink-0 shadow-2xs">APP HUB</span>
             </div>
             <p id="school-brand-tagline" class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block truncate">ศูนย์รวมระบบสารสนเทศและเว็บแอปพลิเคชันเพื่อการศึกษา</p>
           </div>
         </div>
 
         <!-- Right Controls -->
-        <div class="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
+        <div class="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
           <!-- View Switcher (Portal / Admin) -->
-          <button id="btn-switch-admin" onclick="handleAdminButtonClick()" class="flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/80 transition shadow-xs whitespace-nowrap">
+          <button id="btn-switch-admin" onclick="handleAdminButtonClick()" class="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold border border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 hover:border-amber-400/70 hover:bg-amber-50/50 dark:hover:bg-slate-700 transition shadow-xs whitespace-nowrap active:scale-95">
             <i data-lucide="shield-check" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500"></i>
             <span id="label-view-mode" class="hidden sm:inline">ระบบหลังบ้าน (Admin)</span>
             <span id="label-view-mode-mobile" class="sm:hidden font-semibold">Admin</span>
           </button>
 
           <!-- Theme Toggle Button -->
-          <button onclick="toggleTheme()" class="p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition shadow-xs" title="สลับธีม สว่าง / มืด">
-            <i id="theme-icon" data-lucide="moon" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+          <button onclick="toggleTheme()" class="p-2 sm:p-2.5 rounded-xl border border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 hover:border-blue-400/70 hover:bg-slate-100 dark:hover:bg-slate-700 transition shadow-xs active:scale-95" title="สลับธีม สว่าง / มืด">
+            <i id="theme-icon" data-lucide="moon" class="w-4 h-4"></i>
           </button>
         </div>
       </div>
@@ -208,71 +212,81 @@
     <!-- ---------------------------------------------------------- -->
     <div id="view-portal" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-4 sm:space-y-8 pb-20 sm:pb-8">
       
-      <!-- Hero & Instant Search Section -->
-      <section class="relative rounded-2xl sm:rounded-3xl p-5 sm:p-10 overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#0f172a] text-white shadow-xl shadow-blue-950/20">
-        <!-- Background Pattern -->
-        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -left-10 -top-10 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <!-- Hero & Instant Search Section (Executive Mesh + Glassmorphism) -->
+      <section class="relative rounded-2xl sm:rounded-3xl p-6 sm:p-11 overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#0f172a] text-white shadow-2xl shadow-blue-950/25 ring-1 ring-white/15">
+        <!-- Layered Mesh & Ambient Glow Orbs -->
+        <div class="absolute inset-0 hero-mesh-pattern opacity-70 pointer-events-none"></div>
+        <div class="absolute -right-14 -bottom-14 w-72 h-72 bg-amber-400/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-14 -top-14 w-72 h-72 bg-sky-400/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[28rem] h-32 bg-indigo-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="relative z-10 max-w-3xl mx-auto text-center space-y-4">
-          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-400 text-xs font-medium border border-white/15">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        <div class="relative z-10 max-w-3xl mx-auto text-center space-y-4 sm:space-y-5">
+          <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-amber-300 text-xs font-semibold border border-amber-300/25 shadow-sm">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
             <span>ระบบสารสนเทศความเร็วสูง • Single Sign-On Portal</span>
           </div>
 
-          <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
-            ศูนย์รวมเว็บแอปพลิเคชันสถานศึกษา
-          </h1>
-          <p class="text-xs sm:text-base text-slate-300 max-w-2xl mx-auto font-light">
-            เข้าถึงระบบงานวิชาการ งบประมาณ บุคลากร และบริหารทั่วไปได้สะดวกรวดเร็วในจุดเดียว พร้อมสถิติการใช้งานสำหรับรายงานผลการปฏิบัติงาน
-          </p>
+          <div class="space-y-2">
+            <h1 class="text-2xl sm:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight leading-tight drop-shadow-sm">
+              ศูนย์รวมเว็บแอปพลิเคชันสถานศึกษา
+            </h1>
+            <p class="text-xs sm:text-base text-blue-100/85 max-w-2xl mx-auto font-light leading-relaxed">
+              เข้าถึงระบบงานวิชาการ งบประมาณ บุคลากร และบริหารทั่วไปได้สะดวกรวดเร็วในจุดเดียว พร้อมสถิติการใช้งานสำหรับรายงานผลการปฏิบัติงาน
+            </p>
+          </div>
 
-          <!-- Search Bar -->
-          <div class="pt-2">
-            <form role="search" autocomplete="off" onsubmit="return false;" class="relative max-w-xl mx-auto">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                <i data-lucide="search" class="w-5 h-5"></i>
+          <!-- Search Bar (Spotlight Glass Pill) -->
+          <div class="pt-1 sm:pt-2">
+            <form role="search" autocomplete="off" onsubmit="return false;" class="relative max-w-xl mx-auto group">
+              <div class="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-amber-400/40 via-sky-400/30 to-amber-400/40 opacity-0 group-focus-within:opacity-100 blur transition duration-300 pointer-events-none"></div>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 dark:group-focus-within:text-amber-400 transition-colors">
+                  <i data-lucide="search" class="w-5 h-5"></i>
+                </div>
+                <input 
+                  type="search" 
+                  id="search-input" 
+                  name="portal_hub_app_filter"
+                  value=""
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  readonly
+                  onfocus="this.removeAttribute('readonly')"
+                  onpointerdown="this.removeAttribute('readonly')"
+                  ontouchstart="this.removeAttribute('readonly')"
+                  oninput="handleSearch(this.value)"
+                  placeholder="ค้นหาชื่อระบบ, กลุ่มงาน, หรือคำอธิบาย..." 
+                  class="w-full pl-11 pr-10 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl text-slate-900 dark:text-white placeholder-slate-400 border border-white/60 dark:border-slate-700 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/20 text-sm sm:text-base transition shadow-2xl shadow-blue-950/30 outline-none cursor-text"
+                >
+                <button 
+                  type="button"
+                  id="search-clear-btn" 
+                  onclick="clearSearch()" 
+                  class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                  <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
               </div>
-              <input 
-                type="search" 
-                id="search-input" 
-                name="portal_hub_app_filter"
-                value=""
-                autocomplete="off"
-                autocorrect="off"
-                autocapitalize="off"
-                spellcheck="false"
-                readonly
-                onfocus="this.removeAttribute('readonly')"
-                onpointerdown="this.removeAttribute('readonly')"
-                ontouchstart="this.removeAttribute('readonly')"
-                oninput="handleSearch(this.value)"
-                placeholder="ค้นหาชื่อระบบ, กลุ่มงาน, หรือคำอธิบาย..." 
-                class="w-full pl-11 pr-10 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-white/95 dark:bg-slate-900/90 text-slate-900 dark:text-white placeholder-slate-400 border border-transparent focus:border-amber-400 focus:ring-4 focus:ring-amber-400/20 text-sm sm:text-base transition shadow-lg outline-none cursor-text"
-              >
-              <button 
-                type="button"
-                id="search-clear-btn" 
-                onclick="clearSearch()" 
-                class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                <i data-lucide="x" class="w-5 h-5"></i>
-              </button>
             </form>
           </div>
 
-          <!-- Quick Stats Badges -->
-          <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-2 text-xs sm:text-sm">
-            <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur border border-white/10">
+          <!-- Quick Stats Badges (Frosted Glass Pills) -->
+          <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-1 text-xs sm:text-sm">
+            <div class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 shadow-inner transition">
               <i data-lucide="grid" class="w-4 h-4 text-amber-400"></i>
-              <span>ทั้งหมด: <strong id="stat-total-apps" class="font-bold text-white">0</strong> ระบบ</span>
+              <span class="text-blue-100/90">ทั้งหมด: <strong id="stat-total-apps" class="font-bold text-white">0</strong> ระบบ</span>
             </div>
-            <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur border border-white/10">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>พร้อมใช้งาน: <strong id="stat-online-apps" class="font-bold text-emerald-300">0</strong> ระบบ</span>
+            <div class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 shadow-inner transition">
+              <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+              </span>
+              <span class="text-blue-100/90">พร้อมใช้งาน: <strong id="stat-online-apps" class="font-bold text-emerald-300">0</strong> ระบบ</span>
             </div>
-            <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur border border-white/10">
-              <i data-lucide="eye" class="w-4 h-4 text-cyan-400"></i>
-              <span>เข้าใช้งานสะสม: <strong id="stat-total-clicks" class="font-bold text-cyan-300">0</strong> ครั้ง</span>
+            <div class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 shadow-inner transition">
+              <i data-lucide="eye" class="w-4 h-4 text-cyan-300"></i>
+              <span class="text-blue-100/90">เข้าใช้งานสะสม: <strong id="stat-total-clicks" class="font-bold text-cyan-300">0</strong> ครั้ง</span>
             </div>
           </div>
         </div>
@@ -2174,14 +2188,99 @@
     }
 
     const COLOR_CLASSES = {
-      blue: { border: 'border-t-blue-600', bgLight: 'bg-blue-50 dark:bg-blue-950/40', text: 'text-blue-600 dark:text-blue-400' },
-      amber: { border: 'border-t-amber-500', bgLight: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-600 dark:text-amber-400' },
-      emerald: { border: 'border-t-emerald-600', bgLight: 'bg-emerald-50 dark:bg-emerald-950/40', text: 'text-emerald-600 dark:text-emerald-400' },
-      indigo: { border: 'border-t-indigo-600', bgLight: 'bg-indigo-50 dark:bg-indigo-950/40', text: 'text-indigo-600 dark:text-indigo-400' },
-      purple: { border: 'border-t-purple-600', bgLight: 'bg-purple-50 dark:bg-purple-950/40', text: 'text-purple-600 dark:text-purple-400' },
-      rose: { border: 'border-t-rose-600', bgLight: 'bg-rose-50 dark:bg-rose-950/40', text: 'text-rose-600 dark:text-rose-400' },
-      cyan: { border: 'border-t-cyan-600', bgLight: 'bg-cyan-50 dark:bg-cyan-950/40', text: 'text-cyan-600 dark:text-cyan-400' }
+      blue: {
+        border: 'border-t-blue-600',
+        bar: 'from-blue-600 via-blue-500 to-cyan-400',
+        iconBox: 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-md shadow-blue-600/25',
+        bgLight: 'bg-blue-50 dark:bg-blue-950/40',
+        text: 'text-blue-600 dark:text-blue-400',
+        badge: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/70 dark:border-blue-800/60',
+        hoverBorder: 'hover:border-blue-300 dark:hover:border-blue-600'
+      },
+      amber: {
+        border: 'border-t-amber-500',
+        bar: 'from-amber-500 via-orange-400 to-yellow-400',
+        iconBox: 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-md shadow-amber-500/25',
+        bgLight: 'bg-amber-50 dark:bg-amber-950/40',
+        text: 'text-amber-600 dark:text-amber-400',
+        badge: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border border-amber-200/70 dark:border-amber-800/60',
+        hoverBorder: 'hover:border-amber-300 dark:hover:border-amber-600'
+      },
+      emerald: {
+        border: 'border-t-emerald-600',
+        bar: 'from-emerald-500 via-teal-500 to-cyan-400',
+        iconBox: 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-500/25',
+        bgLight: 'bg-emerald-50 dark:bg-emerald-950/40',
+        text: 'text-emerald-600 dark:text-emerald-400',
+        badge: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60',
+        hoverBorder: 'hover:border-emerald-300 dark:hover:border-emerald-600'
+      },
+      indigo: {
+        border: 'border-t-indigo-600',
+        bar: 'from-indigo-600 via-blue-600 to-violet-500',
+        iconBox: 'bg-gradient-to-br from-indigo-600 to-blue-700 text-white shadow-md shadow-indigo-600/25',
+        bgLight: 'bg-indigo-50 dark:bg-indigo-950/40',
+        text: 'text-indigo-600 dark:text-indigo-400',
+        badge: 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200/70 dark:border-indigo-800/60',
+        hoverBorder: 'hover:border-indigo-300 dark:hover:border-indigo-600'
+      },
+      purple: {
+        border: 'border-t-purple-600',
+        bar: 'from-purple-600 via-violet-500 to-fuchsia-400',
+        iconBox: 'bg-gradient-to-br from-purple-600 to-indigo-700 text-white shadow-md shadow-purple-600/25',
+        bgLight: 'bg-purple-50 dark:bg-purple-950/40',
+        text: 'text-purple-600 dark:text-purple-400',
+        badge: 'bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border border-purple-200/70 dark:border-purple-800/60',
+        hoverBorder: 'hover:border-purple-300 dark:hover:border-purple-600'
+      },
+      rose: {
+        border: 'border-t-rose-600',
+        bar: 'from-rose-500 via-pink-500 to-amber-400',
+        iconBox: 'bg-gradient-to-br from-rose-500 to-pink-600 text-white shadow-md shadow-rose-500/25',
+        bgLight: 'bg-rose-50 dark:bg-rose-950/40',
+        text: 'text-rose-600 dark:text-rose-400',
+        badge: 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border border-rose-200/70 dark:border-rose-800/60',
+        hoverBorder: 'hover:border-rose-300 dark:hover:border-rose-600'
+      },
+      cyan: {
+        border: 'border-t-cyan-600',
+        bar: 'from-cyan-500 via-sky-500 to-blue-500',
+        iconBox: 'bg-gradient-to-br from-cyan-500 to-sky-600 text-white shadow-md shadow-cyan-500/25',
+        bgLight: 'bg-cyan-50 dark:bg-cyan-950/40',
+        text: 'text-cyan-600 dark:text-cyan-400',
+        badge: 'bg-cyan-50 dark:bg-cyan-950/50 text-cyan-700 dark:text-cyan-300 border border-cyan-200/70 dark:border-cyan-800/60',
+        hoverBorder: 'hover:border-cyan-300 dark:hover:border-cyan-600'
+      }
     };
+
+    const ICON_SEMANTIC_COLORS = {
+      wallet: 'amber',
+      users: 'blue',
+      folder: 'indigo',
+      award: 'emerald',
+      'clipboard-check': 'purple',
+      'file-text': 'cyan',
+      calendar: 'rose',
+      phone: 'emerald',
+      wrench: 'amber',
+      'calendar-check': 'indigo',
+      clock: 'cyan',
+      'pie-chart': 'purple',
+      'shield-check': 'emerald',
+      'graduation-cap': 'blue'
+    };
+
+    function getAppVisualScheme(app, idx = 0) {
+      if (app && app.color && app.color !== 'blue' && COLOR_CLASSES[app.color]) {
+        return COLOR_CLASSES[app.color];
+      }
+      const iconKey = app && app.icon ? String(app.icon).trim() : '';
+      if (iconKey && ICON_SEMANTIC_COLORS[iconKey]) {
+        return COLOR_CLASSES[ICON_SEMANTIC_COLORS[iconKey]];
+      }
+      const keys = Object.keys(COLOR_CLASSES);
+      return COLOR_CLASSES[keys[idx % keys.length]];
+    }
 
     // 2. HYBRID BACKEND CALLER (Supports Vercel / External Hosting + GAS HtmlService)
     const APP_RUNTIME_CONFIG = {
@@ -2714,20 +2813,23 @@
       if (APP_STATE.selectedCategory !== 'ทั้งหมด' && !activeCats.includes(APP_STATE.selectedCategory)) {
         APP_STATE.selectedCategory = 'ทั้งหมด';
       }
-      const categories = ['ทั้งหมด', ...activeCats];
+      const categories = ['ทั้งหมด', ...activeCats].filter(cat => {
+        if (cat === 'ทั้งหมด' || cat === APP_STATE.selectedCategory) return true;
+        return APP_STATE.apps.some(a => a.category === cat);
+      });
       const container = document.getElementById('category-tabs');
       if (!container) return;
       container.innerHTML = categories.map(cat => {
         const count = cat === 'ทั้งหมด' ? APP_STATE.apps.length : APP_STATE.apps.filter(a => a.category === cat).length;
         const isSel = APP_STATE.selectedCategory === cat;
         const cls = isSel
-          ? 'bg-blue-900 text-white dark:bg-amber-500 dark:text-slate-950 font-bold shadow-md'
-          : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700';
+          ? 'bg-gradient-to-r from-[#0f172a] to-[#1e3a8a] text-white dark:from-amber-500 dark:to-amber-400 dark:text-slate-950 font-bold shadow-md shadow-blue-900/20 border border-transparent'
+          : 'bg-white/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700 hover:border-blue-300 dark:hover:border-amber-500/60 hover:bg-slate-50 dark:hover:bg-slate-700/80';
 
         return `
-          <button onclick="selectCategory('${escapeHTML(cat)}')" class="flex items-center space-x-1.5 sm:space-x-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm transition-all whitespace-nowrap ${cls}">
+          <button onclick="selectCategory('${escapeHTML(cat)}')" class="flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm transition-all whitespace-nowrap ${cls}">
             <span>${escapeHTML(cat)}</span>
-            <span class="px-1.5 py-0.2 rounded-full text-[10px] sm:text-[11px] font-semibold bg-white/20">${count}</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold ${isSel ? 'bg-white/20 dark:bg-slate-950/15' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}">${count}</span>
           </button>
         `;
       }).join('');
@@ -2807,7 +2909,7 @@
       emptyState.classList.add('hidden');
       
       const isList = APP_STATE.portalViewMode === 'list';
-      grid.innerHTML = filtered.map(app => isList ? createAppListHTML(app) : createAppCardHTML(app)).join('');
+      grid.innerHTML = filtered.map((app, idx) => isList ? createAppListHTML(app, idx) : createAppCardHTML(app, idx)).join('');
       safeCreateIcons();
     }
 
@@ -2822,42 +2924,45 @@
       }
       document.getElementById('pinned-count-badge').textContent = pinned.length;
       const isList = APP_STATE.portalViewMode === 'list';
-      grid.innerHTML = pinned.map(app => isList ? createAppListHTML(app) : createAppCardHTML(app)).join('');
+      grid.innerHTML = pinned.map((app, idx) => isList ? createAppListHTML(app, idx) : createAppCardHTML(app, idx)).join('');
       section.classList.remove('hidden');
       safeCreateIcons();
     }
 
-    // Ultra-Compact Card View (Specifically Optimized for Mobile screens)
-    function createAppCardHTML(app) {
+    // Modern Glass Card View (Harmonized Navy-Gold + Multi-Color Gradient Accents)
+    function createAppCardHTML(app, idx = 0) {
       const isFav = APP_STATE.favorites.includes(app.id);
-      const colorScheme = COLOR_CLASSES[app.color] || COLOR_CLASSES.blue;
+      const colorScheme = getAppVisualScheme(app, idx);
 
       let statusDot = 'bg-emerald-500 animate-ping';
-      let statusBg = 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300';
+      let statusBg = 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60';
       let statusText = 'พร้อมใช้งาน';
 
       if (app.status === 'maintenance') {
         statusDot = 'bg-amber-500 animate-ping';
-        statusBg = 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300';
+        statusBg = 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60';
         statusText = 'ปรับปรุง';
       } else if (app.status === 'closed') {
         statusDot = 'bg-rose-500';
-        statusBg = 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300';
+        statusBg = 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60';
         statusText = 'ปิดบริการ';
       }
 
       const isExecutive = app.role_access === 'executive';
 
       return `
-        <div class="app-card relative flex flex-col justify-between bg-white dark:bg-slate-800/90 rounded-xl sm:rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-xs sm:shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden ${colorScheme.border} border-t-3 sm:border-t-4">
-          <div class="p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
-            <div class="flex items-start justify-between">
-              <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl ${colorScheme.bgLight} ${colorScheme.text} flex items-center justify-center shadow-inner shrink-0">
-                ${renderIconOrImage(app.icon, "w-4 h-4 sm:w-6 sm:h-6")}
+        <div class="app-card group relative flex flex-col justify-between bg-white/95 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl border border-slate-200/85 dark:border-slate-700/80 ${colorScheme.hoverBorder} shadow-sm hover:shadow-xl hover:shadow-slate-900/10 dark:hover:shadow-black/30 overflow-hidden">
+          <!-- Top Gradient Ribbon -->
+          <div class="h-1.5 w-full bg-gradient-to-r ${colorScheme.bar}"></div>
+
+          <div class="p-3.5 sm:p-5 space-y-2.5 sm:space-y-3.5 flex-1">
+            <div class="flex items-start justify-between gap-2">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl ${colorScheme.iconBox} flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
+                ${renderIconOrImage(app.icon, "w-5 h-5 sm:w-6 sm:h-6")}
               </div>
 
-              <div class="flex items-center space-x-1 sm:space-x-2">
-                <div class="flex items-center space-x-1 sm:space-x-1.5 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-[11px] font-semibold ${statusBg}">
+              <div class="flex items-center space-x-1 sm:space-x-1.5">
+                <div class="flex items-center space-x-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-[11px] font-semibold ${statusBg}">
                   <span class="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                     <span class="${statusDot} absolute inline-flex h-full w-full rounded-full opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 ${app.status === 'online' ? 'bg-emerald-500' : app.status === 'maintenance' ? 'bg-amber-500' : 'bg-rose-500'}"></span>
@@ -2865,69 +2970,79 @@
                   <span>${statusText}</span>
                 </div>
 
-                <button onclick="openShareModal('${app.id}')" class="p-1 sm:p-1.5 rounded-lg text-slate-400 hover:text-blue-500 transition" title="แชร์ & สร้าง QR Code">
+                <button onclick="openShareModal('${app.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-slate-100 dark:hover:bg-slate-700/80 transition" title="แชร์ & สร้าง QR Code">
                   <i data-lucide="share-2" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                 </button>
-                <button onclick="toggleFavorite('${app.id}', event)" class="p-1 sm:p-1.5 rounded-lg text-slate-400 hover:text-amber-500 transition" title="ปักหมุดระบบโปรด">
-                  <span class="text-xs sm:text-base ${isFav ? 'text-amber-500' : 'text-slate-300 dark:text-slate-600'}">★</span>
+                <button onclick="toggleFavorite('${app.id}', event)" class="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-slate-700/80 transition" title="ปักหมุดระบบโปรด">
+                  <span class="text-sm sm:text-base leading-none ${isFav ? 'text-amber-500' : 'text-slate-300 dark:text-slate-600'}">★</span>
                 </button>
               </div>
             </div>
 
-            <div class="space-y-0.5 sm:space-y-1">
-              <div class="flex flex-wrap items-center gap-1 sm:gap-1.5">
-                <span class="text-[8px] sm:text-[10px] font-medium px-1.5 py-0.2 sm:py-0.5 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${escapeHTML(app.category)}</span>
-                ${isExecutive ? '<span class="text-[8px] sm:text-[10px] font-semibold px-1.5 py-0.2 sm:py-0.5 rounded-md bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 flex items-center gap-0.5"><i data-lucide="lock" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i>ผู้บริหาร</span>' : ''}
+            <div class="space-y-1.5">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md ${colorScheme.badge}">${escapeHTML(app.category)}</span>
+                ${isExecutive ? '<span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200/70 dark:border-rose-800 flex items-center gap-1"><i data-lucide="lock" class="w-2.5 h-2.5"></i>ผู้บริหาร</span>' : ''}
               </div>
-              <h3 class="text-xs sm:text-base font-bold text-slate-900 dark:text-white tracking-tight line-clamp-1">${escapeHTML(app.title)}</h3>
+              <h3 class="text-sm sm:text-[15px] font-bold text-slate-900 dark:text-white tracking-tight leading-snug line-clamp-2 sm:min-h-[2.6rem]">${escapeHTML(app.title)}</h3>
             </div>
 
-            <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 line-clamp-1 sm:line-clamp-2 leading-relaxed min-h-0 sm:min-h-[32px]">
+            <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed sm:min-h-[2.4rem]">
               ${escapeHTML(app.description || 'ไม่มีคำอธิบาย')}
             </p>
-
-            <div class="flex items-center space-x-1 text-[9px] sm:text-[11px] text-slate-400 dark:text-slate-500 pt-0 sm:pt-0.5">
-              <i data-lucide="eye" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
-              <span>เข้าใช้งาน <strong id="click-count-${app.id}" class="text-slate-700 dark:text-slate-300 font-semibold">${Number(app.click_count || 0).toLocaleString()}</strong> ครั้ง</span>
-            </div>
           </div>
 
-          <div class="px-2.5 pb-2.5 sm:px-5 sm:pb-5 pt-1.5 sm:pt-2 border-t border-slate-100 dark:border-slate-700/60">
-            <!-- Desktop Layout: 2 Rows -->
-            <div class="hidden sm:block space-y-2">
-              <button 
-                onclick="handleAppClick('${app.id}')"
-                class="w-full flex items-center justify-center space-x-2 py-2.5 px-4 rounded-xl text-sm font-semibold bg-gradient-to-r from-blue-900 to-indigo-900 hover:from-blue-800 hover:to-indigo-800 text-white shadow-md transition active:scale-[0.98]">
-                <span>เข้าใช้งานระบบ</span>
-                <i data-lucide="arrow-right" class="w-4 h-4 text-amber-400"></i>
-              </button>
-
-              <div class="grid grid-cols-2 gap-2">
-                <button onclick="openManualModal('${app.id}')" class="flex items-center justify-center space-x-1 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition">
-                  <i data-lucide="book-open" class="w-3.5 h-3.5 text-blue-500"></i>
-                  <span>คู่มือ</span>
+          <div class="px-3.5 pb-3.5 sm:px-5 sm:pb-5 pt-2.5 border-t border-slate-100 dark:border-slate-700/60 bg-slate-50/40 dark:bg-slate-900/20">
+            <!-- Stats + Secondary Actions Meta Row (Desktop) -->
+            <div class="hidden sm:flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500 mb-2.5">
+              <div class="flex items-center space-x-1.5">
+                <i data-lucide="eye" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span>เข้าใช้งาน <strong id="click-count-${app.id}" class="text-slate-700 dark:text-slate-200 font-bold tabular-nums">${Number(app.click_count || 0).toLocaleString()}</strong> ครั้ง</span>
+              </div>
+              <div class="flex items-center space-x-1">
+                <button onclick="openManualModal('${app.id}')" class="inline-flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-white dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition" title="คู่มือ / รายละเอียด">
+                  <i data-lucide="book-open" class="w-3 h-3 text-blue-500"></i>
+                  <span>รายละเอียด</span>
                 </button>
-                <button onclick="openReportModal('${app.id}')" class="flex items-center justify-center space-x-1 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-rose-600 transition">
-                  <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-500"></i>
+                <button onclick="openReportModal('${app.id}')" class="inline-flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-white dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition" title="แจ้งปัญหาการใช้งาน">
+                  <i data-lucide="alert-triangle" class="w-3 h-3 text-rose-500"></i>
                   <span>แจ้งปัญหา</span>
                 </button>
               </div>
             </div>
 
-            <!-- Mobile Layout: Streamlined Single Row (Saves 50% vertical space!) -->
-            <div class="sm:hidden flex items-center space-x-1.5">
+            <!-- Desktop Primary CTA -->
+            <div class="hidden sm:block">
               <button 
                 onclick="handleAppClick('${app.id}')"
-                class="flex-1 flex items-center justify-center space-x-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-blue-900 to-indigo-900 text-white shadow-xs active:scale-[0.98]">
-                <span>เข้าใช้งาน</span>
-                <i data-lucide="arrow-right" class="w-3 h-3 text-amber-400"></i>
+                class="w-full flex items-center justify-center space-x-2 py-2.5 px-4 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#0f172a] via-[#1e3a8a] to-[#1e40af] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white shadow-md shadow-blue-950/15 transition-all active:scale-[0.98]">
+                <span>เข้าใช้งานระบบ</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform"></i>
               </button>
-              <button onclick="openManualModal('${app.id}')" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 text-xs shrink-0" title="คู่มือการใช้งาน">
-                <i data-lucide="book-open" class="w-3.5 h-3.5 text-blue-500"></i>
-              </button>
-              <button onclick="openReportModal('${app.id}')" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-rose-600 text-xs shrink-0" title="แจ้งปัญหาการใช้งาน">
-                <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-500"></i>
-              </button>
+            </div>
+
+            <!-- Mobile Layout: Compact Single Row + Click Count -->
+            <div class="sm:hidden space-y-2">
+              <div class="flex items-center justify-between text-[10px] text-slate-400">
+                <span class="flex items-center space-x-1">
+                  <i data-lucide="eye" class="w-3 h-3"></i>
+                  <span>เข้าใช้งาน <strong class="text-slate-700 dark:text-slate-200">${Number(app.click_count || 0).toLocaleString()}</strong> ครั้ง</span>
+                </span>
+              </div>
+              <div class="flex items-center space-x-1.5">
+                <button 
+                  onclick="handleAppClick('${app.id}')"
+                  class="flex-1 flex items-center justify-center space-x-1.5 py-2 px-3 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#0f172a] via-[#1e3a8a] to-[#1e40af] text-white shadow-sm active:scale-[0.98]">
+                  <span>เข้าใช้งานระบบ</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-amber-400"></i>
+                </button>
+                <button onclick="openManualModal('${app.id}')" class="p-2 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 text-xs shrink-0" title="รายละเอียด / คู่มือ">
+                  <i data-lucide="book-open" class="w-3.5 h-3.5 text-blue-500"></i>
+                </button>
+                <button onclick="openReportModal('${app.id}')" class="p-2 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:text-rose-600 text-xs shrink-0" title="แจ้งปัญหาการใช้งาน">
+                  <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-500"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -2935,17 +3050,17 @@
     }
 
     // Compact List View (Fits 8-10 apps per screen on mobile)
-    function createAppListHTML(app) {
+    function createAppListHTML(app, idx = 0) {
       const isFav = APP_STATE.favorites.includes(app.id);
-      const colorScheme = COLOR_CLASSES[app.color] || COLOR_CLASSES.blue;
+      const colorScheme = getAppVisualScheme(app, idx);
       const isExecutive = app.role_access === 'executive';
 
       return `
-        <div class="app-list-item flex items-center justify-between p-2 sm:p-3 bg-white dark:bg-slate-800/95 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-blue-400 dark:hover:border-amber-500 shadow-xs transition-all gap-2">
+        <div class="app-list-item flex items-center justify-between p-2.5 sm:p-3.5 bg-white/95 dark:bg-slate-800/95 rounded-xl sm:rounded-2xl border border-slate-200/85 dark:border-slate-700/80 ${colorScheme.hoverBorder} shadow-xs hover:shadow-md transition-all gap-2.5">
           <!-- Left: Icon & Info -->
-          <div class="flex items-center space-x-2.5 min-w-0 flex-1">
-            <div class="w-8 h-8 rounded-lg ${colorScheme.bgLight} ${colorScheme.text} flex items-center justify-center shrink-0">
-              ${renderIconOrImage(app.icon, "w-4 h-4")}
+          <div class="flex items-center space-x-3 min-w-0 flex-1">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${colorScheme.iconBox} flex items-center justify-center shrink-0">
+              ${renderIconOrImage(app.icon, "w-4 h-4 sm:w-5 sm:h-5")}
             </div>
             <div class="min-w-0 flex-1">
               <div class="flex items-center space-x-1.5">
@@ -2953,8 +3068,8 @@
                 ${isExecutive ? '<span class="text-[8px] font-bold px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 shrink-0">ผู้บริหาร</span>' : ''}
               </div>
               <div class="flex items-center space-x-2 text-[10px] text-slate-500 dark:text-slate-400 pt-0.5 truncate">
-                <span class="px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 shrink-0">${escapeHTML(app.category)}</span>
-                <span class="truncate">👁️ ${Number(app.click_count || 0).toLocaleString()} ครั้ง</span>
+                <span class="px-1.5 py-0.2 rounded ${colorScheme.badge} shrink-0">${escapeHTML(app.category)}</span>
+                <span class="truncate">เข้าใช้งาน ${Number(app.click_count || 0).toLocaleString()} ครั้ง</span>
               </div>
             </div>
           </div>
@@ -2970,7 +3085,7 @@
             <button onclick="openManualModal('${app.id}')" class="hidden sm:inline-flex p-1.5 rounded-lg text-slate-400 hover:text-blue-500 transition" title="คู่มือ">
               <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
             </button>
-            <button onclick="handleAppClick('${app.id}')" class="flex items-center space-x-1 py-1.5 px-2.5 sm:px-3 rounded-lg text-xs font-semibold bg-gradient-to-r from-blue-900 to-indigo-900 hover:from-blue-800 text-white shadow-xs active:scale-95 transition">
+            <button onclick="handleAppClick('${app.id}')" class="flex items-center space-x-1 py-1.5 px-3 sm:px-3.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#0f172a] to-[#1e3a8a] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white shadow-sm active:scale-95 transition">
               <span>เข้าใช้งาน</span>
               <i data-lucide="arrow-right" class="w-3 h-3 text-amber-400"></i>
             </button>
@@ -4307,7 +4422,7 @@
             : idx === 2
               ? 'bg-orange-200 dark:bg-orange-900/60 text-orange-800 dark:text-orange-200'
               : 'bg-slate-100 dark:bg-slate-700/70 text-slate-500 dark:text-slate-300';
-        const colorObj = COLOR_CLASSES[app.color] || COLOR_CLASSES.blue;
+        const colorObj = getAppVisualScheme(app, idx);
         return `
           <div class="p-2.5 rounded-xl bg-slate-50/90 dark:bg-slate-900/50 border border-slate-200/70 dark:border-slate-700/70 hover:border-blue-300 dark:hover:border-blue-700 transition">
             <div class="flex items-center justify-between gap-2 mb-1.5">
@@ -4686,8 +4801,8 @@
         return;
       }
 
-      tbody.innerHTML = filtered.map(l => {
-        const colorObj = COLOR_CLASSES[l.color] || COLOR_CLASSES.blue;
+      tbody.innerHTML = filtered.map((l, idx) => {
+        const colorObj = getAppVisualScheme(l, idx);
         const isMob = String(l.device || '').toLowerCase().includes('mobile');
         return `
           <tr class="hover:bg-slate-50/90 dark:hover:bg-slate-700/40 transition">
